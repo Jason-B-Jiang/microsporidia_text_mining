@@ -1,0 +1,439 @@
+column,microsporidia_species,original_value,manually_corrected_value,reason_for_correction
+Locality,Agglomerata cladocera (siberian isolate),(Novosibirsk region) Western Siberia,"Russia (Novosibirsk region, Western Siberia)",Siberia is a part of russia
+Locality,Amblyospora burlaki,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Amblyospora caspius,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Amblyospora flavescens,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Amblyospora kolarovi,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Amblyospora orbiculata,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Amblyospora rugosa,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Andreanna caspii,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Crepidula beklemishevi,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Dimeiospora palustris,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Pankovaia semitubulata,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Parathelohania divulgata,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Parathelohania formosa,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Parathelohania sibirika,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Parathelohania teguldeti,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Parathelohania tomski,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Tuzetia dualis,Siberia,Russia (Siberia),Siberia is a part of russia
+Locality,Amblyospora mavlukevia,"(pond (Mavlukeevskoe lake) within Tom River flood plain, Tomsk region, Western Siberia) Russia","Russia (pond in Mavlukeevskoe lake within Tom River flood plain, Tomsk region, Western Siberia)",nested brackets are inconsistent with formatting of other locality entries
+Locality,Ameson herrnkindi,(Atlantic coast of FL) USA,"USA (Atlantic Coast, Florida)",Full state name should be recorded
+Locality,Canningia tomici,"Europe, USA (MI)",Europe; USA (Michigan),"Full state name should be recorded, separate localities should be separated by semicolons"
+Locality,Nosema dryocoetesi,Federal Republic of Germany (Lower Saxony),Germany (Lower Saxony),just writing ‘Germany’ is enough
+Locality,Pleistophora malthodes,Federal Republic of Germany (Lower Saxony),Germany (Lower Saxony),just writing ‘Germany’ is enough
+Locality,Pleistophora xyloteri,Federal Republic of Germany (Lower Saxony),Germany (Lower Saxony),just writing ‘Germany’ is enough
+Locality,Nucleospora cyclopteri,(Skagafjordur) northern Iceland; Norway,Iceland (Skagafjordur); Norway,'northern’ isn’t consistent with how other countries are recorded in localities
+Locality,Tubulinosema loxostegi,"(Karasuk district, Novosibirsk region) Russian Federation","Russia (Karasuk district, Novosibirsk region)",just writing ‘Russia’ is enough
+Locality,Unnamed Nosema sp. 506,USA (MS),USA (Mississippi),Full state name should be recorded
+Locality,Tuzetia weidneri,USA (MS),USA (Mississippi),Full state name should be recorded
+Hosts,Alfvenia ceriodaphniae,Ceriodaphniae,Ceriodaphnia reticulata,originally recorded host name was incomplete
+Hosts,Dictyocoela diporeiae,Diporeia sp.; Amphipoda; Gammaridea,Diporeia spp.,"Diporeia spp. Is what actually appears in text, Amphipoda and Gammaridea are orders and don’t actually correspond to any hosts"
+Hosts,Alternosema bostrichidis,Prostephanus truncatus; Dinoderus bifoveolatus; Dinoderus porcellus; Dinoderus minutus,Prostephanus truncatus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora abserrati,Aedes abserratus; Acanthocyclops vernalis,Aedes abserratus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora aestiva,Aedes dorsalis; Aedes caspius,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora bakcharia,Ochlerotatus excrucians,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora baritia,Ochlerotatus excrucians,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora bogashovia,Ochlerotatus excrucians,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora certa,Aedes cinereus,Ae. cinerus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora chulymia,Ochlerotatus caspius,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora cinerei,Aedes cinereus; Acanthocyclops vernalis,Aedes cinereus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora dolosi,Culex dolosus; Metacyclops mendocinus,Culex dolosus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora dyxenoides,Culex annulirostris; Mesocyclops sp.; Mesocyclops albicans,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora excrucii,Aedes excrucians,Aedes excruciates,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora firma,Aedes punctor,Ae. punctor,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora flavescens,Aedes sp.; Culex sp.,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora hristinia,Ochlerotatus communis,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora indicola,Culex sitiens; Apocyclops sp.,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora jurginia,Ochlerotatus excrucians,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora kazankia,Ochlerotatus dianaetus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora kolarovi,Aedes sp.; Culex sp.,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora macrococcus,Corynoneura sp.,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora mavlukevia,Aedes cinereus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora media,Aedes dorsalis,Ae. c. dorsalis,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora mocrushinia,Ochlerotatus mocrushinia,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora modestium,Culex modestus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora orbiculata,Aedes sp.; Culex sp.,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora rugosa,Aedes sp.; Culex sp.,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora salairia,Aedes cinereus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora severinia,Ochlerotatus excrucians,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora shegaria,Aedes cinereus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora sp. 37,Aedes cantador,Aedes cantans,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora sp. 40,Ochlerotatus detritus,Ochlerotatus detritus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora stimuli,Aedes stimulans; Diacyclops bicuspidatus thomasi,Aedes stimulans,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora timirasia,Aedes cinereus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora undata,Aedes sp.; Culex sp.,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora urski,Aedes sp.; Culex sp.,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amblyospora weiseri,Aedes cantans,Aedes cantans,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Ameson sp.,Penaeus monodon,Penaeus monodon,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Amoebosporidium minutum,Vannella cirrifera,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Anncaliia meligethi (= Nosema meligethi),Meligethes aenus; Pieris brassicae,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Auraspora canningae,Lepidocyrtus lignorum,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Berwaldia hypodermica,Simocephalus vetulus,Simocephalus vetulus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Berwaldia nana,Daphnia longispina/galeata complex,Daphnia longispina/galeata complex,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Binucleospora elongata,Candona sp.,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Brachiola vesicularum,Homo sapiens,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Caudosporidae sp.,Gigantodax antarcticum; G. chilense; G. fuluescens; G. rufescens; G. rufidulum,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Conglomerata obtusa,Daphnia pulex,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Cucumispora dikerogammari,Dikerogammarus villosus; Dikerogammarus haemobaphes; Chaetogammarus ischnus; Pontogammarus crassus,Chaetogammarus ischnus; Pontogammarus crassus; Dikerogammaris villosus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Cystosporogenes sp.,Agrilus anxius,Agrilus anxius,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Desmozoon lepeophtherii (also Paranucleospora theridion),Lepeophtheirus salmonis; Salmo salar; Caligus elongatus; Oncorhynchus mykiss,Lepeophtheirus salmonis,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Dictyocoela diporeiae,Diporeia sp.; Amphipoda; Gammaridea,Amphipoda; Gammaridea; Diporeia spp.,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Dictyocoela duebenum,Gammarus duebeni,Gammarus duebeni,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Dictyocoela roeselum,Gammarus roeseli; Gammarus balcanicus; Gammarus fossarum,Gammarus roeseli,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Duboscqia aediphaga,Aedes vigilax,Aedes (Ochlerotatus) vigilax,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Encephalitozoon flavescens,Tomocerus flavescens,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Encephalitozoon hellem,Homo sapiens; Melopsittacus undulatus; Eclectus roratus; Chalcopsitta scintillata,human,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Encephalitozoon intestinalis (= Septata intestinalis),Homo sapiens,Aids Patients,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Encephalitozoon lacertae,Mabuya perrotetii; Podracis muralis,Mabuya perrotetii,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Encephalitozoon sp. (?),Agapornis roseicolli,Agapornis roseicolli,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Encephalitozoon sp. 2,Homo sapiens,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Encephalitozoon sp. 3,Homo sapiens,AIDS patient,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Encephalitozoon sp. 4,Homo sapiens,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Encephalitozoon sp. 5,Struthio camelus,Struthio camelus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Encephalitozoon sp. 6,Amblyomma cajennense; Anocentor nitens,Amblyomma cajennense; Anocentor nitens,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Encephalitozoon sp. 7,Homo sapiens,Homo sapiens,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Endoreticulatus sp. from Eilema complana,Eilema complana,Eilema complana,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Enterocytospora artemiae,Artemia franciscana; Artemia monica; Artemia parthenogenetica,Artemia franciscana; Artemia parthenogenetica,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Enterocytozoon bieneusi,Homo sapiens; Macaca mulatta,human,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Enterocytozoon salmonis (Nucleospora salmonis),Oncorhynchus tshawytscha; Oncorhynchus mykiss,Oncorhynchus tshawytscha,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Enterocytozoon sp.,Cyclopterus lumpus,Cyclopterus lumpus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Enteropsectra breve,Oscheius tipulae,Oscheius tipulae,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Enteropsectra longa,Oscheius sp.,Oscheius sp.,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Episeptum anaboliae,Anabolia furcata,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Episeptum pseudoinversum,Sericostoma personatum,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Episeptum trichoinvadens,Potamophylax cingulatus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Flabelliforma diaptomi (= Stempellia diaptomi),Diaptomus gracilis,Diaptomus gracilis,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Geusia gamocystis,Gamocystis ephemerae,Gamocystis ephemerae,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Globulispora mitoportans,Daphnia pulex; Simocephalus vetulus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Glugea americanus,Lophius americanus,Lophius americanus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Gurleya orchestiae,Orchestia bottae,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Hamiltosporidium magnivora (= Flabelliforma magnivora),Daphnia magna,Daphnia magna,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Helmichia aggregata,Endochironomus sp.,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Heterovesicula cowani (= Vairimorpha sp.),Anabrus simplex,Anabrus simplex,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Hrabyeia xerkophora,"""freshwater oligochaete""",Nais christinae,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Intrapredatorus barri,Culex fuscanus; Culex halifaxi,Culex fuscanus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Johenrea locustae,Locusta migratoria capito; Locusta migratoria migratorioides; Schistocerca gregaria,Locusta migratoria capito,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Kabataia arthuri (= Microsporidium arthuri),Pangasius sutchi,Pangasius sutchi,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Kneallhazia solenopsae,Solenopsis invicta; Solenopsis richteri,Solenopsis invicta,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Liebermannia sp. [unknown],Chorthippus loratus,Chorthippus loratus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Loggerhead turtle microsporidium,Caretta caretta,Caretta caretta,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Loma diplodae,Diplodus sargus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Loma fontinalis,Savelinus fontinalis,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Loma kenti,Microgadus proximus,Pacific tomcod,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Loma lingcodae,Ophiodon elongatus,lingcod,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Loma mugili,Planiliza haematocheila,Mugil soiuy,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Loma pacificodae,Gadus macrocephalus,Pacific cod,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Loma richardi,Anoplopoma fimbria,sablefish,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Loma salmonae,Oncorhynchus mykiss; Oncorhynchus kisutch; Oncorhynchus tshawytscha; Salvelinus fontinalis; Salmo trutta,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Loma sp.,Oncorhynchus mykiss,Onco-rhynchus mykiss,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Loma wallae,Theragra chalcogramma,walleye pollock,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Lotmaria passim,Apis mellifera; Apis cerana,Apis mellifera,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Metchnikovella sp. (?),Ephydatia fluviatilis,Ephydatia fluviatilis,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Metchnikovella spiralis,Polyrhabdina elegans,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microspordium sp. C. aurata,Crepidodera aurata,Crepidodera aurata,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microsporidium acanthocephali,Acanthocephaloides propinquus; Yamagutisentis sp.; Acanthocephaloides geneticus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microsporidium caeruleosticti,Sparus caeruleostictus,Sparus caeruleostictus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microsporidium cerebralis,Salmo salar,Salmo salar,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microsporidium ceylonensis,Homo sapiens,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microsporidium chironomi from 1981,Chironomus attenuatus,Chironomus attenuatus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microsporidium chloroscombri,Chloroscombrus chrysurus,Chloroscombrus chrysurus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microsporidium dicologolossae,Dicologolossa cuneata,Dicologoglossa cuneata,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microsporidium enchytreidorum,Fridericia ratzeli,Fridericia tatzeli,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microsporidium fimbriatum,Aedes taeniorhynchus,Aedes taeniorhynchus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microsporidium lotaensis,Aedes vigilax,Aedes (Ochlerotatus) vigilax,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microsporidium milevae,Thunnus thynnus,Thunnus thynnus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microsporidium oligochaetae,Fridericia ratzeli,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microsporidium propinqui,Acanthocephaloides propinquus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Microsporidium rhabdophilia,Oncorhynchus tshawtscha; Oncorhynchus kisutch; Salmo gairdnerii gairdnerii,Oncorhynchus kisutch; Salmo gairdnerii gairdnerii; Oncorhynchus tshawytscha,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Mutated Thelohaniidae sp.,Microtendipes pedellus,Microtendipes pedellus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Mutated Unikaryonidae sp.,Cricotopus silvestris,Cricotopus silvestris,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Myosporidium ladogensis (= Pleistophora ladogensis),Lota lota; Osmerus eperlanus,Lota lota; Osmerus eperlanus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Napamichum aequifilum,Limmochares aquatica,Limnochares aquatica,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Napamichum cellatum,Endochironomus sp.,midge larva,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nematocida ausubeli,Caenorhabditis briggsae; Caenorhabditis elegans; Caenorhabditis remanei,Caenorhabditis elegans,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nematocida ciargi,Procephalobus sp. strain JU2895,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nematocida homosporus,Oscheius tipulae; Rhabditella typhae,Oscheius tipulae,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nematocida major,Caenorhabditis briggsae; Caenorhabditis tropicali,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nematocida minor,Oscheius tipulae,Oscheius tipulae,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nematocida parisii,Caenorhabditis elegans; Caenorhabditis briggsae,Caenorhabditis elegans,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nolleria pulicis,Ctenocephalides felis; Pulex simulans,Ctenocephalides felis,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema apicalis,Hylobittacus apicalis,Hylobittacus apicalis,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema apterygotae,Orchesella flavescens,Orchesella flavescens,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema assamensis,Antheraea assamensis,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema ceranae,Apis cerana; Apis mellifera; Galleria mellonella,Apis cerana,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema chrysorrhoeae,Euprocitis chrysorrhoea,Euproctis chrysorrhoea,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema dikerogammari,Dikerogammarus villosus; Pontogamtnarus crassus,Dikerogammarus villosus; Pontogammarus crassus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema dryocoetesi,Dryocoetes autographus,Dryocoetes autograpbus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema dungeri,Isotoma violacea,Isotoma violacea,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema epilachnae,Epilachna varivestis,Epilachna varivestis,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema fuhreri,Phtiracarus globosus,Phtiracarus globosus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema furnacalis,Ostrinia nubilalis; Helicoverpa zea,Helicoverpa zea,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema lepidocyrti,Lepidocyrtus lignorum,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema liturae,Spodoptera litura; Helicoverpa armigera,Spodoptera litura; Heliothis armigera,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema maddoxi,Chinavia hilaris; Halyomorpha halys; Euschistus servus; Euschistus tristigmus; Euschistus variolarius; Podisus maculiventris; Nezara viridula; Oncopeltus fasciatus,Chinavia hilaris; Halyomorpha halys; Euschistus servus; Euschistus tristigmus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema medinalis,Cnaphalocrocis medinalis,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema mylitta,Antheraea mylitta,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema onychiurus,Onychiurus quadriocellatus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema ormieresi,Marteilia refringens,Marteilia refringens,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema petrosa,Lepidocyrtus cyaneus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema pfeifferi,Acanthocyclops viridis,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema pilicornis,Schizocerella pilicornis; Heliothis zea; Spodoptera frugiperda; Diacrisia virginica; Autographa precationis,Schizocerella pilicornis,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema polyphemi,Polyphemus pediculus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema ricini,Philosamia ricini,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema sp. 30,Sceliodes cordalis,Sceliodes cordalis,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema sp. 32,Ectomyelois ceratoniae,Ectomyelois ceratoniae,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema sp. 33,Helicoverpa armigera,Helicoverpa armigera,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema sp. 35,NA,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema sp. from Operophtera brumata,Operophtera brumata,Operophtera brumata,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema sp. from Orthosia cerasi,Orthosia cerasi,Orthosia cerasi,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema sp. from Orthosia cruda,Orthosia cruda,Orthosia cruda,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema sp. from Tortrix viridana,Tortrix viridana,Tortrix viridana,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema steganacari,Steganacurus striculus,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nosema varivestis,Epilachna varivestis,Epilachna varivestis,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Novothelohania ovalae,Ochlerotatus caspius,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nucleophaga terricolae,Thecamoeba terricola,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Nudispora biformis,Coenagrion hastulaturn,Coenagrion hastulatum,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Octosporea diaphanosomae,Diaphanosoma brachyurum,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Oligosporidium arahnicolum,Xysticus cambridgei,Xysticus cambridgei,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Oogranate pervascens,Maculaura alaskensis; Maculaura aquilonia; Maculaura oregonensis; Maculaura cerebrosa,Maculaura alaskensis; Maculaura aquilonia; Maculaura oregonensis; Maculaura cerebrosa,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Ordospora durforti (= Endoreticulatus durforti),Artemia sp.,the Artemia,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Ovipleistophora diplostomuri,Lepomis macrochirus; infected with Posthodiplostomum minimum; Procambarus bivittatus,Lepomis macrochirus; Posthodiplostomum minimum,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Pancytospora epiphaga,Caenorhabditis brenneri,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Pancytospora philotis,Oscheius tipula,Oscheius tipula,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Paraepiseptum plectronemiae (Paraepiseptum plectrocnemiae),Plectronemia conspersa,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Paramicrosporidium saccamoebae,Saccamoeba sp.,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Paramicrosporidium vannellae,Vannella sp.,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Paranosema grylli (= Nosema grylli),Gryllus bimaculatus,Gryllus bimaculatus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Parathelohania costatus,Aedes punctor; Aedes diantaeus; Aedes excrucians,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Parathelohania divulgata,Anopheles messeae,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Parathelohania formosa,Anopheles messeae,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Parathelohania sibirika,Anopheles messeae,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Parathelohania teguldeti,Anopheles beklemishevi,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Parathelohania tomski,Anopheles messeae,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Pleistophora (?) sp.,Sparus aurata,Sparus aurata,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Pleistophora beebei,Brachyhypopomus beebei,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Pleistophora duodecimae,Coryphaenoides nasutus,Coryphaenoides nasulus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Pleistophora oribatei,Phtiracarus piger; Rhysotritia duplicata; Microtritia minima; Damaeus clavipes; Carabodes fernoralis; Phtiracarus sp.,Rhysotritia duplicata; Microtritia minima; Damaeus clavipes,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Pleistophora priacanthicola,Priacantus tayenus,Priacantus tayenus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Pleistophora ronneafiei,Homo sapiens,human,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Pleistophora sp. 9,Heterophyes heterophyes,Heterophyes heterophyes,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Pleistophora xyloteri,Xyloterus domesticus,Xyloterus domesticus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Telomyxa orae,Ora texana,Ora texana,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Tetramicra brevifilum,Lophius budegassa; Scophthalmus maximus; Scophthalmidae; Salmo salar,Lophius budegassa; Scophthalmus maximus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Thelohania assovi,Odagmia sp.,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Thelohania bomboschi,Tomocerus flavescens,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Thelohania collernbolae,Tomocerus flavescens,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Thelohania limbata,Tramea limbata,Tramea limbata,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Thelohaniida sp. 1,Gigantodax chilense; G. rufidulum,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Thelohaniida sp. 2,Cnesia dissimilis,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Thelohaniidae sp. 1,unidentified notata,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Thelohaniidae sp. 2,unidentified notata,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Toxoglugea tillargi,Tholymis tillarga,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Toxospora volgae,Sogupopeiga sp.,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Trachipleistophora anthropophthera,Homo sapiens,human,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Trachipleistophora extenrec,Hemicentetes semispinosus; Mus musculus,Hemicentetes semispinosus; mice,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Trachipleistophora hominis,Homo sapiens,patient with AIDS,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Trachipleistophora sp.,Homo sapiens,AIDS patients,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Tubulinosema ratisbonesis (Tubulinosema ratisbonensis),Drosophila melanogaster,Drosophila melanogaster,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Tuzetia weidneri,Litopenaeus setiferus; Farfantepenaeus azectus,Litopenaeus setiferus; Farfantepenaeus aztecus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unikaryon phyllotretae,Phyllotreta undulata,Phyllotreta undulata,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unikaryon slaptonleyi,Echinoparyphium recurratum,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Canningia sp.,Otiorynchus sulcatus,Otiorynchus sulcatus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Enterocytozoon sp.,Pleuronectes vetulus,Pleuronectes vetulus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Enterospora sp.,Eupagurus bernhardus,Eupagurus bernhardus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,unnamed microspordium in bearded dragons,Pogona vitticeps,Pogona vitticeps,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Microsporidia sp. 1,Halammohydra intermedia,Halammohydra intermedia,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Microsporidia sp. 2,Dioryctria amatella,Dioryctria amatella,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Microsporidia sp. 3,Fenneropenaeus indicus; Penaeus semisulcatus,Fenneropenaeus indicus; Penaeus sernisulcatus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Microsporidia sp. 4,Penaeus monodon,Penaeus monodon,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Microsporidia sp. A,Phytoseiulus persimilis,Phytoseiulus persimilis,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Microsporidia sp. B,Phytoseiulus persimilis,Phytoseiulus persimilis,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Microsporidia sp. NIK-5hm,Bombyx mori,Bombyx mori,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,unnamed microsporidium (possibly Tricornia muhezae or Merocinta davidii),Mesocyclops rarus,Mesocyclops rarus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,unnamed microsporidium 1,Pseudodiplorchis americanus,Pseudodiplorchis americanus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,unnamed microsporidium 2,Martianus dermestoides,Martianus dermestoides,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,unnamed microsporidium 3,Gammarus duebeni,Gammarus duebeni,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,unnamed microsporidium in a parrot,Amazona ochrocephala oratrix,Amazona ochrocephala oratrix,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,unnamed microsporidium in Acrida turrita,Acrida turrita,Acrida turrita,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,unnamed microsporidium in Agapornis roseicollis,Agapornis roseicollis,Agapornis roseicollis,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,unnamed microsporidium in gastrotrich,Turbanella lutheri,Turbanella lutheri,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Microsporidium sp. C81 (Microsporidium sp. C81),Corophium volutator,Corophium volutator,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Microsporidium sp. SH (Microsporidium sp. SH),Verasper variegatus,Verasper variegatus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Nosema sp. (possibly Endoreticulatus schubergi),Euprocitis chrysorrhoea,Euprocitis chrysorrhoea,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Nosema sp. 1,Antheraea mylitta,Antheraea mylitta,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Nosema sp. 2,Pieris rapae,Pieris rapae,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Nosema sp. 3,Spodoptera litura,Spodoptera litura,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Nosema sp. 506,Diatraea grandiosella; Ostrinia nubilalis; Diatraea crambidoides,Diatraea grandiosella; Diatraea crambidoides,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Pleistophora sp.,Epinephelus chlorostignei,Epinephelus chlorostignei,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed sp.,Hypera postica,NA,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Vairimorpha sp.,Hellula undalis,Hellula undalis,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Unnamed Vittaforma-like sp.,Homo sapiens,patients,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Vairimorpha hybomitrae,Hybomitra sp.,Gadflies,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Vairimorpha sp BM,Bombyx mori,Bombyx mori,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Vairimorpha sp. (authors proposed Nosema mesnili and Microsporidium mesnili be merged to this one species),Pieris rapae,Pieris rapae,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Vavraia anostraca,Artemia sp.,Artemia,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Vavraia parastacida,Cherax tenuimanus; Cherax quinquecarinatus; Cherax quadricarinatus; Cherax albidus,Cherax tenuimanus,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Hosts,Vittaforma corneae (= Nosema corneum),Homo sapiens; athymic mice,humans,"hosts were not in the abstract, or the recorded host name was different from the actual host name in the text"
+Species Name,Amblyospora aestiva,Amblyospora aestiva,Amblyospora aectiva,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema purkeri,Nosema purkeri,Nosema parkeri,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,unnamed microsporidum of Microspora phylum,unnamed microsporidum of Microspora phylum,Encephalitozoon sp. 7,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Amblyospora sp. 37,Amblyospora sp. 37,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Amblyospora sp. 40,Amblyospora sp. 40,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Amblyospora weiseri,Amblyospora weiseri,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Ameson sp.,Ameson sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Amoebosporidium minutum,Amoebosporidium minutum,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Anncaliia meligethi (= Nosema meligethi),Anncaliia meligethi,Nosema meligethi,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Berwaldia hypodermica,Berwaldia hypodermica,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Berwaldia nana,Berwaldia nana,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Caudosporidae sp.,Caudosporidae sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Conglomerata obtusa,Conglomerata obtusa,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Cucumispora dikerogammari,Cucumispora dikerogammari,Nosema dikerogammari,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Cystosporogenes sp.,Cystosporogenes sp.,Cystosporogenes species,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Desmozoon lepeophtherii (also Paranucleospora theridion),Desmozoon lepeophtherii,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Dictyocoela duebenum,Dictyocoela duebenum,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Dictyocoela roeselum,Dictyocoela roeselum,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Encephalitozoon flavescens,Encephalitozoon flavescens,E.flavescens,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Encephalitozoon intestinalis (= Septata intestinalis),Encephalitozoon intestinalis,Septata Intestinalis,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Encephalitozoon sp. (?),Encephalitozoon sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Encephalitozoon sp. 2,Encephalitozoon sp. 2,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Encephalitozoon sp. 3,Encephalitozoon sp. 3,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Encephalitozoon sp. 4,Encephalitozoon sp. 4,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Encephalitozoon sp. 5,Encephalitozoon sp. 5,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Encephalitozoon sp. 6,Encephalitozoon sp. 6,Encephalitozoon-like microsporidia,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Encephalitozoon sp. 7,Encephalitozoon sp. 7,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Endoreticulatus sp. from Eilema complana,Endoreticulatus sp. from Eilema complana,Endoreticulatus sp.,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Enterocytozoon sp.,Enterocytozoon sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Enteropsectra breve,Enteropsectra breve,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Enteropsectra longa,Enteropsectra longa,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Episeptum anaboliae,Episeptum anaboliae,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Episeptum pseudoinversum,Episeptum pseudoinversum,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Episeptum trichoinvadens,Episeptum trichoinvadens,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Flabelliforma diaptomi (= Stempellia diaptomi),Flabelliforma diaptomi,Stempellia diaptomi,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Geusia gamocystis,Geusia gamocystis,Geusia gamocysti,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Glugea americanus,Glugea americanus,Glugea umericunus,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Hamiltosporidium magnivora (= Flabelliforma magnivora),Hamiltosporidium magnivora,Flabelliforma magnivora,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Helmichia aggregata,Helmichia aggregata,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Heterovesicula cowani (= Vairimorpha sp.),Heterovesicula cowani,Vairimorpha n. sp.,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Kabataia arthuri (= Microsporidium arthuri),Kabataia arthuri,Microsporidium arthuri,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Kneallhazia solenopsae,Kneallhazia solenopsae,Thelohania solenopsae,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Liebermannia sp. [unknown],Liebermannia sp. [unknown],Liebermannia sp.,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Loggerhead turtle microsporidium,Loggerhead turtle microsporidium,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Loma diplodae,Loma diplodae,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Loma fontinalis,Loma fontinalis,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Metchnikovella sp. (?),Metchnikovella sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Microspordium sp. C. aurata,Microspordium sp. C. aurata,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Microsporidium caeruleosticti,Microsporidium caeruleosticti,Microsporidioum caeruleosticti,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Microsporidium cerebralis,Microsporidium cerebralis,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Microsporidium chironomi from 1981,Microsporidium chironomi from 1981,Microsporidium chironomi,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Microsporidium chloroscombri,Microsporidium chloroscombri,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Microsporidium dicologolossae,Microsporidium dicologolossae,Microsporidium dicologoglossae,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Microsporidium fimbriatum,Microsporidium fimbriatum,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Microsporidium milevae,Microsporidium milevae,Microsporidia sp.,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Mutated Thelohaniidae sp.,Mutated Thelohaniidae sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Mutated Unikaryonidae sp.,Mutated Unikaryonidae sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Myosporidium ladogensis (= Pleistophora ladogensis),Myosporidium ladogensis,Pleistophora ladogensis,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nematocida ciargi,Nematocida ciargi,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nematocida homosporus,Nematocida homosporus,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nematocida major,Nematocida major,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nematocida minor,Nematocida minor,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema apicalis,Nosema apicalis,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema apterygotae,Nosema apterygotae,Nosema apyterygotae,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema assamensis,Nosema assamensis,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema dryocoetesi,Nosema dryocoetesi,Nosemu dryocoetesi,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema dungeri,Nosema dungeri,Noserrla dungeri,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema epilachnae,Nosema epilachnae,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema fuhreri,Nosema fuhreri,Nosema führeri,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema medinalis,Nosema medinalis,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema mylitta,Nosema mylitta,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema ormieresi,Nosema ormieresi,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema pfeifferi,Nosema pfeifferi,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema polyphemi,Nosema polyphemi,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema ricini,Nosema ricini,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema sp. 30,Nosema sp. 30,Nosema species,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema sp. 32,Nosema sp. 32,Nosema-type microsporidian,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema sp. 33,Nosema sp. 33,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema sp. 35,Nosema sp. 35,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema sp. from Operophtera brumata,Nosema sp. from Operophtera brumata,Nosema species,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema sp. from Orthosia cerasi,Nosema sp. from Orthosia cerasi,Nosema species,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema sp. from Orthosia cruda,Nosema sp. from Orthosia cruda,Nosema species,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema sp. from Tortrix viridana,Nosema sp. from Tortrix viridana,Nosema species,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Nosema varivestis,Nosema varivestis,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Octosporea diaphanosomae,Octosporea diaphanosomae,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Oligosporidium arahnicolum,Oligosporidium arahnicolum,Oligosporidium nov. gen. arachnicolum,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Oogranate pervascens,Oogranate pervascens,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Ordospora durforti (= Endoreticulatus durforti),Ordospora durforti,Endoreticulatus durforti,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Pancytospora philotis,Pancytospora philotis,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Paraepiseptum plectronemiae (Paraepiseptum plectrocnemiae),Paraepiseptum plectronemiae,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Paramicrosporidium saccamoebae,Paramicrosporidium saccamoebae,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Paramicrosporidium vannellae,Paramicrosporidium vannellae,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Paranosema grylli (= Nosema grylli),Paranosema grylli,Nosema grylli,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Parathelohania costatus,Parathelohania costatus,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Pleistophora (?) sp.,Pleistophora sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Pleistophora beebei,Pleistophora beebei,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Pleistophora priacanthicola,Pleistophora priacanthicola,Plistophora priacanthicola,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Pleistophora sp. 9,Pleistophora sp. 9,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Pleistophora xyloteri,Pleistophora xyloteri,Pleistophoru xyloteri,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Telomyxa orae,Telomyxa orae,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Thelohania collernbolae,Thelohania collernbolae,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Thelohania limbata,Thelohania limbata,Thelo. hania limbatan.,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Thelohaniida sp. 1,Thelohaniida sp. 1,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Thelohaniida sp. 2,Thelohaniida sp. 2,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Thelohaniidae sp. 1,Thelohaniidae sp. 1,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Thelohaniidae sp. 2,Thelohaniidae sp. 2,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Toxoglugea tillargi,Toxoglugea tillargi,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Trachipleistophora sp.,Trachipleistophora sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Tubulinosema ratisbonesis (Tubulinosema ratisbonensis),Tubulinosema ratisbonesis,Tubulinosema ratisbonensis,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unikaryon phyllotretae,Unikaryon phyllotretae,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unikaryon slaptonleyi,Unikaryon slaptonleyi,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Canningia sp.,Unnamed Canningia sp.,Canningia sp.,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Enterocytozoon sp.,Unnamed Enterocytozoon sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Enterospora sp.,Unnamed Enterospora sp.,Enterospora sp.,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,unnamed microspordium in bearded dragons,unnamed microspordium in bearded dragons,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Microsporidia sp. 1,Unnamed Microsporidia sp. 1,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Microsporidia sp. 2,Unnamed Microsporidia sp. 2,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Microsporidia sp. 3,Unnamed Microsporidia sp. 3,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Microsporidia sp. 4,Unnamed Microsporidia sp. 4,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Microsporidia sp. A,Unnamed Microsporidia sp. A,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Microsporidia sp. B,Unnamed Microsporidia sp. B,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Microsporidia sp. NIK-5hm,Unnamed Microsporidia sp. NIK-5hm,microsporidian Sp.,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,unnamed microsporidium (possibly Tricornia muhezae or Merocinta davidii),unnamed microsporidium,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,unnamed microsporidium 1,unnamed microsporidium 1,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,unnamed microsporidium 2,unnamed microsporidium 2,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,unnamed microsporidium 3,unnamed microsporidium 3,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,unnamed microsporidium in a parrot,unnamed microsporidium in a parrot,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,unnamed microsporidium in Acrida turrita,unnamed microsporidium in Acrida turrita,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,unnamed microsporidium in Agapornis roseicollis,unnamed microsporidium in Agapornis roseicollis,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,unnamed microsporidium in gastrotrich,unnamed microsporidium in gastrotrich,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Microsporidium sp. C81 (Microsporidium sp. C81),Unnamed Microsporidium sp. C81,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Microsporidium sp. SH (Microsporidium sp. SH),Unnamed Microsporidium sp. SH,Microsporidium sp. SH,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Nosema sp. (possibly Endoreticulatus schubergi),Unnamed Nosema sp.,Nosema isolate,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Nosema sp. 1,Unnamed Nosema sp. 1,Nosema sp.,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Nosema sp. 2,Unnamed Nosema sp. 2,Nosema sp.,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Nosema sp. 3,Unnamed Nosema sp. 3,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Nosema sp. 506,Unnamed Nosema sp. 506,Nosema spp.,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Pleistophora sp.,Unnamed Pleistophora sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed sp.,Unnamed sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Vairimorpha sp.,Unnamed Vairimorpha sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Unnamed Vittaforma-like sp.,Unnamed Vittaforma-like sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Vairimorpha sp BM,Vairimorpha sp BM,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Vairimorpha sp. (authors proposed Nosema mesnili and Microsporidium mesnili be merged to this one species),Vairimorpha sp.,NA,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+Species Name,Vittaforma corneae (= Nosema corneum),Vittaforma corneae,Nosema corneum,recorded microsporidia was not in abstract or the recorded microsporidia was different from the actual microsporidia name in text
+all_references,Encephalitozoon hellem,"1. Black SS, Steinohrt LA, Bertucci DC, Rogers LB, Didier ES. Encephalitozoon hellem in budgerigars (Melopsittacus undulatus). Vet Pathol. 1997;34:189–98.
+2. Pulparampil N, Graham D, Phalen D, Snowden K. Encephalitozoon hellem in two eclectus parrots (Eclectus roratus): identification from archival tissues. J Eukaryot Microbiol. 1998;45:651–5.
+3. Suter C, Mathis A, Hoop R, Deplazes P. Encephalitozoon hellem infection in a yellow-streaked lory (Chalcopsitta scintillata) imported from Indonesia. Vet Rec. 1998;143:694–5.
+4. Didier ES, Didier PJ, Friedberg DN, Stenson SM, Orenstein JM, Yee RW, et al. Isolation and characterization of a new human microsporidian, Encephalitozoon hellem (n. sp.), from three AIDS patients with keratoconjunctivitis. J Infect Dis. 1991;163:617–21.
+5. Didier PJ, Didier ES, Orenstein JM, Shadduck JA. Fine structure of a new human microsporidian, Encephalitozoon hellem, in culture. J Protozool. 1991;38:502–7.","1. Didier ES, Didier PJ, Friedberg DN, Stenson SM, Orenstein JM, Yee RW, et al. Isolation and characterization of a new human microsporidian, Encephalitozoon hellem (n. sp.), from three AIDS patients with keratoconjunctivitis. J Infect Dis. 1991;163:617–21.
+2. Didier PJ, Didier ES, Orenstein JM, Shadduck JA. Fine structure of a new human microsporidian, Encephalitozoon hellem, in culture. J Protozool. 1991;38:502–7.
+3. Black SS, Steinohrt LA, Bertucci DC, Rogers LB, Didier ES. Encephalitozoon hellem in budgerigars (Melopsittacus undulatus). Vet Pathol. 1997;34:189–98.
+4. Pulparampil N, Graham D, Phalen D, Snowden K. Encephalitozoon hellem in two eclectus parrots (Eclectus roratus): identification from archival tissues. J Eukaryot Microbiol. 1998;45:651–5.
+5. Suter C, Mathis A, Hoop R, Deplazes P. Encephalitozoon hellem infection in a yellow-streaked lory (Chalcopsitta scintillata) imported from Indonesia. Vet Rec. 1998;143:694–5.",papers incorrectly listed by chronological order
+all_references,Nosemoides syacii,"Walters HS, Kfir R. Development of Nosema partelli, new species (Protozoa: Microsporida: Nosematidae) in the stem borer Chilo partellus (Swinhoe) (Lepidoptera: Pyralidae). Afr Entomol. 1993;1:57–62.","Faye N, Toguebaye BS, Bouix G. Nosemoides syacii n. sp., a microsporidian parasite of the West African turbot Syacium micrurum Ranzani, 1840. Syst Parasitol. 1994;29:43–50.  ",papers incorrectly listed by chronological order
+Date Identified,Chapmanium macrocystis,1983; 1975,1975; 1983,dates described incorrectly ordered
+Date Identified,Nucleophaga amoebae,2014,1895,incorrect date of discovery given
+Citation data,Nematocida parisii,"Zhang, G., Sachse, M., Prevost, M.-C., Luallen, R.J., Troemel, E.R., Felix, M.-A., 2016. A Large Collection of Novel Nematode-Infecting Microsporidia and Their Diverse Interactions with Caenorhabditis elegans and Other Related Nematodes. PLoS Pathog 12, e1006093. https://doi.org/10.1371/journal.ppat.1006093
+
+Troemel, E.R., Felix, M.-A., Whiteman, N.K., Barriere, A., Ausubel, F.M., 2008. Microsporidia are natural intracellular parasites of the nematode Caenorhabditis  elegans. PLoS Biol 6, 2736–2752. https://doi.org/10.1371/journal.pbio.0060309
+
+Troemel, E.R., Felix, M.-A., Whiteman, N.K., Barriere, A., Ausubel, F.M., 2008. Microsporidia are natural intracellular parasites of the nematode Caenorhabditis  elegans. PLoS Biol 6, 2736–2752. https://doi.org/10.1371/journal.pbio.0060309","1. Troemel, E.R., Felix, M.-A., Whiteman, N.K., Barriere, A., Ausubel, F.M., 2008. Microsporidia are natural intracellular parasites of the nematode Caenorhabditis  elegans. PLoS Biol 6, 2736–2752.  https://doi.org/10.1371/journal.pbio.0060309
+2. Zhang, G., Sachse, M., Prevost, M.-C., Luallen, R.J., Troemel, E.R., Felix, M.-A., 2016. A Large Collection of Novel Nematode-Infecting Microsporidia and Their Diverse Interactions with Caenorhabditis elegans and Other Related Nematodes. PLoS Pathog 12, e1006093. https://doi.org/10.1371/journal.ppat.1006093","redundant sources listed, inconsistent formatting with rest of recorded citations in the dataset"
+Date Identified,Nematocida parisii,2016,2008; 2016,original date of discovery was not recorded

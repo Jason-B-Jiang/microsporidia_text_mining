@@ -1,0 +1,27 @@
+manually formated locality column in manually_format_multi_sp_papers.csv; copy edits to microsporidia_species.csv to reflect this
+convert US/Canada/etc province/state abbreviations (ex: OR) to full names (ex: OR -> Oregon)
+make sure all regions separated by '; ', and subregions separated by ' | '
+	for subregions with detailed info: ex: Province, City, Neighborhood, separate subentries by commas
+	
+region indicated w/ extra info but not as subregions
+ex: Red Sea coast off Saudi Arabia
+only consider region extracted from the text
+
+(Near Greifswald) Germany -> manually changed to Germany (Greifswald)
+(Novosibirsk region) Western Siberia
+Siberia
+(pond (Mavlukeevskoe lake) within Tom River flood plain, Tomsk region, Western Siberia) Russia(pond (Krotovo Lake) located near the village of Troitskoe, Novosibirsk region, Western Siberia) Russia
+(Atlantic coast of FL) USA
+Europe, USA (MI)
+Federal Republic of Germany (Lower Saxony)
+remove (?)
+(Skagafjordur) northern Iceland; Norway
+(Karasuk district, Novosibirsk region) Russian Federation
+USA (MS)
+remove question marks in general
+
+Alfvenia ceriodaphniae -> manually changed host from 'Ceriodaphniae' to 'Ceriodaphnia reticulata'
+
+Dictyocoela diporeiae -> remove 'Amphipoda' and 'Gammaridea' as hosts and change 'Diporeia sp.' to Diporeia spp.'
+
+* all changes done in microsp_species.csv

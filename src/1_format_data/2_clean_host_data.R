@@ -3,7 +3,7 @@
 # Clean microsporidia name + host data for predictions
 #
 # Jason Jiang - Created: 2022/07/29
-#               Last edited: 2022/08/26
+#               Last edited: 2022/09/09
 #
 # Mideo Lab - Microsporidia text mining
 #
@@ -49,7 +49,24 @@ main <- function() {
         mutate(microsp_in_text_matches = get_species_matches_in_text(microsp_in_text,
                                                                      title_abstract),
                hosts_in_text_matches = get_species_matches_in_text(hosts_in_text,
-                                                                   title_abstract))
+                                                                   title_abstract)) %>%
+        group_by(title_abstract) %>%
+        mutate(species = str_c(str_replace_na(species),
+                               collapse = ' || '),
+               species_cleaned = str_c(str_replace_na(species_cleaned),
+                                       collapse = ' || '),
+               microsp_in_text = str_c(str_replace_na(microsp_in_text),
+                                       collapse = ' || '),
+               hosts_in_text = str_c(str_replace_na(hosts_in_text),
+                                     collapse = ' || '),
+               microsp_in_text_matches = str_c(str_replace_na(microsp_in_text_matches),
+                                               collapse = ' || '),
+               hosts_in_text_matches = str_c(str_replace_na(hosts_in_text_matches),
+                                             collapse = ' || ')) %>%
+        select(species, species_cleaned, title_abstract,
+               microsp_in_text, hosts_in_text, microsp_in_text,
+               microsp_in_text_matches, hosts_in_text_matches) %>%
+        distinct(.keep_all = T)
     }
   }
   

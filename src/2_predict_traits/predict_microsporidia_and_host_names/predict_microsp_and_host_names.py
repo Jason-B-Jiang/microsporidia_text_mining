@@ -3,7 +3,7 @@
 # Predict microsporidia species names + hosts from paper titles + abstracts
 #
 # Jason Jiang - Created: 2022/05/19
-#               Last edited: 2022/09/02
+#               Last edited: 2022/09/12
 #
 # Mideo Lab - Microsporidia text mining
 #
@@ -16,21 +16,33 @@ import re
 import pandas as pd
 from taxonerd import TaxoNERD
 import spacy
-from typing import Tuple, Union
+from spacy.matcher import Matcher
+from typing import Tuple, Union, Dict
 import numpy as np
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 from collections import Counter
+import pickle
 
 ################################################################################
 
-## Initialize language models
+## Initialize language models + other global variables
 
 taxonerd = TaxoNERD(model="en_ner_eco_biobert",  # use more accurate model
                     prefer_gpu=False,
                     with_abbrev=True)
 
 nlp = spacy.load('en_core_web_md')
+
+try:  # get cached microsporidia/host predictions for texts, if exists
+    with open('./cached_microsp_host_preds.pickle', 'rb') as p:
+        PREDICTIONS_CACHE = pickle.load(p)
+except FileNotFoundError:
+    PREDICTIONS_CACHE = {}
+
+EXCLUDED_VERBS = {'propose', 'name', 'have', 'ribosomal', 'know', 'suggest'}
+
+DOC_CACHE = {}
 
 ################################################################################
 
@@ -80,21 +92,30 @@ def main() -> None:
     # create wordcloud of all verbs in microsporidia and host sentences
     make_verb_wordcloud(microsp_and_host_names)
 
+    # make matcher for finding sentences with infection "trigger words",
+    # for microsporidia-host relation extraction
+    trigger_words_matcher = make_trigger_words_matcher(verb_freqs)
+
     # save naive microsporidia + host predictions to csv for now, and evaluate
     # accuracy of predictions
     microsp_and_host_names.to_csv(
         '../../../results/naive_microsporidia_and_host_name_predictions.csv'
         )
 
-    # write csv of verb frequencies in microsporidia host sentences to help with
-    # relation extraction between Microsporidia and their hosts
-    verb_freqs.to_csv(
-        '../../../results/microsporidia_hosts_verb_freqs.csv'
-    )
+    # save cached predictions for future reference
+    with open('cached_microsp_host_preds.pickle', 'wb') as p:
+        pickle.dump(PREDICTIONS_CACHE, p)
 
 ################################################################################
 
-## Helper functions
+## Helper functions for predicting microsporidia + host entities in texts
+
+def get_cached_document(txt: str) -> spacy.tokens.doc.Doc:
+    if txt not in DOC_CACHE:
+        DOC_CACHE[txt] = nlp(txt)
+    
+    return DOC_CACHE[txt]
+
 
 def predict_microsp_and_hosts(txt: str) -> Tuple[str, str]:
     """From a given string, txt, predict the novel Microsporidia species and
@@ -110,10 +131,15 @@ def predict_microsp_and_hosts(txt: str) -> Tuple[str, str]:
         Empty string when there's no predictions for Microsporidia or hosts
 
     """
+    # fetch cached predictions for this text, if possible
+    if txt in PREDICTIONS_CACHE:
+        return PREDICTIONS_CACHE[txt]
+
     # get all predicted taxonomic names from txt w/ TaxoNERD
     try:
         pred_taxons = list(set(list(taxonerd.find_in_text(txt)['text'])))
     except KeyError:  # no taxonerd predicted taxons from text
+        PREDICTIONS_CACHE[txt] = '', ''
         return '', ''
 
     # filter out obvious false positives
@@ -143,7 +169,9 @@ def predict_microsp_and_hosts(txt: str) -> Tuple[str, str]:
     # species
     hosts = [pred for pred in pred_taxons if pred not in microsp]
 
-    return '; '.join(microsp), '; '.join(hosts)
+    # store predictions for text in cache and return it
+    PREDICTIONS_CACHE[txt] = '; '.join(microsp), '; '.join(hosts)
+    return PREDICTIONS_CACHE[txt]
 
 
 def get_abbreviated_species_name(species: str) -> str:
@@ -164,6 +192,11 @@ def get_abbreviated_species_name(species: str) -> str:
     species = species.split()
     return f"{' '.join([s[0] + '.' for s in species[:len(species) - 1]])} {species[-1]}"
 
+################################################################################
+
+## Helper functions for finding common verbs (trigger words) in sentences
+## indicating host infection by microsporidia
+
 
 def get_verbs_in_microsp_and_host_sentences(txt: str, microsp: str, hosts: str) \
     -> Union[str, float]:
@@ -173,18 +206,18 @@ def get_verbs_in_microsp_and_host_sentences(txt: str, microsp: str, hosts: str) 
     Return NaN if no sentences containing both microsporidia and hosts, or
     no verbs all in such sentences
     """
-    doc = nlp(txt)
+    doc = get_cached_document(txt)
 
     try:
-        microsp = microsp.split('; ') if microsp != '' else []
+        microsp = re.split('; | \|\| ', microsp) if microsp != '' else []
         microsp = microsp + [get_abbreviated_species_name(m) for m in microsp]
-    except AttributeError:
+    except (AttributeError, TypeError):
         microsp = []
 
     try:
-        hosts = hosts.split('; ') if hosts != '' else []
+        hosts = re.split('; | \|\| ', hosts) if hosts != '' else []
         hosts = hosts + [get_abbreviated_species_name(h) for h in hosts]
-    except AttributeError:
+    except (AttributeError, TypeError):
         hosts = []
 
     sents = [sent for sent in doc.sents if \
@@ -243,6 +276,80 @@ def make_verb_wordcloud(microsp_and_host_names: pd.core.frame.DataFrame) \
     plt.tight_layout(pad = 0)
 
     plt.savefig('../../../results/verbs_wordcloud.png')
+
+################################################################################
+
+## Helper functions for rule-based relation extraction between Microsporidia and
+## host entities
+
+def make_trigger_words_matcher(verb_freqs: pd.core.frame.DataFrame, n: int = 15) -> \
+    spacy.matcher.matcher.Matcher:
+    """Return a spaCy matcher 
+    """
+    trigger_words = list(filter(lambda v: v not in EXCLUDED_VERBS,
+                                set(verb_freqs.verb[:n])))
+    trigger_words_matcher = Matcher(nlp.vocab)
+    trigger_words_matcher.add('trigger', [
+        [{'LEMMA': {'IN': trigger_words}}]
+    ])
+
+    return trigger_words_matcher
+
+
+def predict_microsp_host_relations(txt: str, pred_microsp: str, pred_hosts: str,
+                                   trigger_words_matcher: spacy.matcher.matcher.Matcher) -> \
+                                    Union[str, float]:
+    """
+    """
+    if pred_microsp == '' or pred_hosts == '':
+        # if no microsporidia or no host predictions for this text, then no
+        # relations can be predicted
+        return float('nan')
+
+    doc = get_cached_document(txt)
+    pred_microsp, pred_hosts = pred_microsp.split('; '), pred_hosts.split('; ')
+
+    infection_sents = [sent for sent in doc.sents if trigger_words_matcher(sent)]
+    microsp_host_relations = {}
+
+    for sent in infection_sents:
+        microsp_in_sent = [m for m in pred_microsp if m.lower() in sent.text.lower()]
+        hosts_in_sent = [h for h in pred_hosts if h.lower() in sent.text.lower()]
+
+        # microsporidia + host predictions both in the same sentence, so try
+        # to extract relations from this sentence
+        if microsp_in_sent and hosts_in_sent:
+            if len(microsp_in_sent) == 1:
+                # 1 microsporidia to >= 1 host, assign all hosts to this
+                # microsporidia
+                # one to one or one to many
+                if microsp_in_sent[0] not in microsp_host_relations:
+                    microsp_host_relations[microsp_in_sent[0]] = hosts_in_sent
+
+                else:  # only add hosts not previously added for this microsporidia
+                    [microsp_host_relations[microsp_in_sent[0]].append(h) for \
+                        h in hosts_in_sent if h not in \
+                            microsp_host_relations[microsp_in_sent[0]]]
+
+            elif len(hosts_in_sent) == 1:
+                # >=1 microsporidia to 1 host, assign host to all microsporidia
+                # many to one
+                for m in microsp_in_sent:
+                    if m not in microsp_host_relations:
+                        microsp_host_relations[m] = hosts_in_sent
+                    
+                    else:
+                        microsp_host_relations[m].append(hosts_in_sent[0]) if \
+                            hosts_in_sent[0] not in microsp_host_relations[m] else \
+                                None
+                                
+            else:
+                # >=1 microsporidia to >=1 host, ???
+                # many-to-many
+                pass
+
+    return microsp_host_relations
+
 
 ################################################################################
 

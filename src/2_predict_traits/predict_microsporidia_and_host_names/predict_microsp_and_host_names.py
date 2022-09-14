@@ -146,8 +146,8 @@ def predict_microsp_and_hosts(txt: str) -> Tuple[str, str]:
     # i.e 'microsporidia', 'microsporidium', or a family/order name (as indicated
     # # by a single token ending in 'ae')
     pred_taxons = [pred for pred in pred_taxons if pred not in \
-        ['Microsporidia', 'microsporidia', 'Microsporidium', 'microsporidium',
-        'Microsporida', 'microsporida'] and not (len(pred.split()) == 1 and \
+        {'Microsporidia', 'microsporidia', 'Microsporidium', 'microsporidium',
+        'Microsporida', 'microsporida'} and not (len(pred.split()) == 1 and \
             re.search('ae$', pred) is not None)]
 
     # start finding microsporidia taxons, looking for taxons w/ known Microsporidia
@@ -313,42 +313,22 @@ def predict_microsp_host_relations(txt: str, pred_microsp: str, pred_hosts: str,
     microsp_host_relations = {}
 
     for sent in infection_sents:
-        microsp_in_sent = [m for m in pred_microsp if m.lower() in sent.text.lower()]
-        hosts_in_sent = [h for h in pred_hosts if h.lower() in sent.text.lower()]
+        microsp_in_sent = {m for m in pred_microsp if m.lower() in sent.text.lower()}
+        hosts_in_sent = {h for h in pred_hosts if h.lower() in sent.text.lower()}
 
         # microsporidia + host predictions both in the same sentence, so try
         # to extract relations from this sentence
         if microsp_in_sent and hosts_in_sent:
-            if len(microsp_in_sent) == 1:
-                # 1 microsporidia to >= 1 host, assign all hosts to this
-                # microsporidia
-                # one to one or one to many
-                if microsp_in_sent[0] not in microsp_host_relations:
-                    microsp_host_relations[microsp_in_sent[0]] = hosts_in_sent
-
-                else:  # only add hosts not previously added for this microsporidia
-                    [microsp_host_relations[microsp_in_sent[0]].append(h) for \
-                        h in hosts_in_sent if h not in \
-                            microsp_host_relations[microsp_in_sent[0]]]
-
-            elif len(hosts_in_sent) == 1:
-                # >=1 microsporidia to 1 host, assign host to all microsporidia
-                # many to one
-                for m in microsp_in_sent:
-                    if m not in microsp_host_relations:
-                        microsp_host_relations[m] = hosts_in_sent
-                    
-                    else:
-                        microsp_host_relations[m].append(hosts_in_sent[0]) if \
-                            hosts_in_sent[0] not in microsp_host_relations[m] else \
-                                None
-                                
-            else:
-                # >=1 microsporidia to >=1 host, ???
-                # many-to-many
-                pass
-
-    return microsp_host_relations
+            # assign all hosts in sentence to each microsporidia
+            for m in microsp_in_sent:
+                if m not in microsp_host_relations:
+                    microsp_host_relations[m] = hosts_in_sent
+                
+                else:
+                    microsp_host_relations[m] = \
+                        microsp_host_relations[m] | hosts_in_sent
+    
+    return microsp_host_relations if len(microsp_host_relations) > 0 else float('nan')
 
 
 ################################################################################

@@ -3,7 +3,7 @@
 # Predict microsporidia species names + hosts from paper titles + abstracts
 #
 # Jason Jiang - Created: 2022/05/19
-#               Last edited: 2022/09/12
+#               Last edited: 2022/09/23
 #
 # Mideo Lab - Microsporidia text mining
 #
@@ -17,12 +17,13 @@ import pandas as pd
 from taxonerd import TaxoNERD
 import spacy
 from spacy.matcher import Matcher
-from typing import Tuple, Union, Dict
+from typing import Tuple, Union, Dict, Set
 import numpy as np
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 from collections import Counter
 import pickle
+import copy
 
 ################################################################################
 
@@ -95,6 +96,17 @@ def main() -> None:
     # make matcher for finding sentences with infection "trigger words",
     # for microsporidia-host relation extraction
     trigger_words_matcher = make_trigger_words_matcher(verb_freqs)
+
+    # add column for predicted microsporidia - host relations in each text
+    microsp_and_host_names['relations'] = microsp_and_host_names.apply(
+        lambda x: get_relations_str(
+            predict_microsp_host_relations(x.title_abstract,
+                                           x.pred_microsp,
+                                           x.pred_hosts,
+                                           trigger_words_matcher)
+        ),
+        axis=1
+    )
 
     # save naive microsporidia + host predictions to csv for now, and evaluate
     # accuracy of predictions
@@ -330,6 +342,42 @@ def predict_microsp_host_relations(txt: str, pred_microsp: str, pred_hosts: str,
     
     return microsp_host_relations if len(microsp_host_relations) > 0 else float('nan')
 
+
+def get_relations_str(relations: Dict[str, Set[str]]) -> str:
+    """
+    """
+    # Note to self: how to combine redundant entries in predictions
+    # 1) get all dictionary keys, and determine which entries are synonyms
+    # 2) merge together all synonymous entries, and keep abbreviated names
+    # 3) determine which host entries are synonyms for each key
+    # 4) remove synonymous names, keeping the full ones
+    # 
+    # when evaluating in R, check for both full names and abbreviated names
+    # for match between predictions and recorded values
+    if isinstance(relations, float):
+        return float('nan')
+
+    relations_copy = copy.deepcopy(relations)
+    for m in relations.keys():
+        abbrev_microsp = get_abbreviated_species_name(m)
+        if m != abbrev_microsp and abbrev_microsp in relations:
+            # merge entry for full microsporidia name with entry for abbreviated
+            # microsporidia name, then remove the entry for the abbreviated name
+            relations_copy[m] = relations_copy[m] | relations_copy[abbrev_microsp]
+            relations_copy.pop(abbrev_microsp)
+
+            # remove abbreviated names from predicted hosts for each microsporidia,
+            # if no full name was also predicted for the host
+            for h in relations[m] | relations[abbrev_microsp]:
+                abbrev_host = get_abbreviated_species_name(h)
+                if h != abbrev_host and abbrev_host in \
+                    relations_copy[m]:
+                    relations_copy[m].remove(abbrev_host)
+    
+    # return string of all microsporidia and host relations like so:
+    # microsp 1: host 1, host 2, ...; microsp 2: host 1, host 2, ...; ...
+    return \
+        '; '.join([f"{m}: {', '.join(relations_copy[m])}" for m in relations_copy])
 
 ################################################################################
 

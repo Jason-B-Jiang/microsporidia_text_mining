@@ -3,7 +3,7 @@
 # Evaluate accuracy of predicted microsporidia traits
 #
 # Jason Jiang - Created: 2022/05/17
-#               Last edited: 2022/08/26
+#               Last edited: 2022/09/23
 #
 # Mideo Lab - Microsporidia text mining
 #
@@ -11,6 +11,7 @@
 # -----------------------------------------------------------------------------
 
 library(tidyverse)
+library(rlist)
 
 ################################################################################
 
@@ -345,9 +346,117 @@ hosts_f1_strict <- 2 * ((hosts_precision_strict * hosts_recall_strict) / (hosts_
 
 ################################################################################
 
-## Evaluate microsporidia + host name predictions (using verb information)
+## Evaluate microsporidia + host relations
 
-## TBA
+get_relations_from_recorded <- function(microsp_in_text, hosts_in_text) {
+  relations <- as.list(str_split(hosts_in_text, ' \\|\\| ')[[1]]) %>%
+    lapply(function(s) {str_split(s, '; ')[[1]]})
+  
+  names(relations) <- str_split(microsp_in_text, ' \\|\\| ')[[1]]
+  
+  filtered_relations <- list()
+  for (microsp in names(relations)) {
+    if (!(length(relations[[microsp]]) == 1 && relations[[microsp]] == 'NA')) {
+      filtered_relations[[microsp]] <- relations[[microsp]]
+    }
+  }
+  
+  
+  # not using ifelse function, as that seems to remove list names
+  if (length(filtered_relations) == 0) {
+    return(NA)
+  }
+  
+  return(filtered_relations)
+}
+
+
+get_relations_from_predicted <- function(pred_relations) {
+  pred_relations <- str_split(pred_relations, '; ')[[1]]
+  
+  pred_relations_microsp <- sapply(pred_relations, function(s) {str_extract(s, '^.+(?=:)')})
+  
+  pred_relations <- as.list(pred_relations) %>%
+    lapply(function(s) {str_split(str_remove(s, '^.+: '), ', ')[[1]]})
+  
+  names(pred_relations) <- pred_relations_microsp
+  
+  return(pred_relations)
+}
+
+
+get_relations_tp_fp_fn <- function(microsp_in_text, hosts_in_text, pred_relations) {
+  tp <- 0
+  fp <- 0
+  fn <- 0
+  
+  if (any(is.na(microsp_in_text), is.na(hosts_in_text), is.na(pred_relations))) {
+    if ((is.na(hosts_in_text) | is.na(microsp_in_text)) & !is.na(pred_relations)) {
+      pred <- get_relations_from_predicted(pred_relations)
+      fp <- sum(lengths(pred))
+      
+    } else if (!is.na(hosts_in_text) & !is.na(microsp_in_text)) {
+      actual <- get_relations_from_recorded(microsp_in_text, hosts_in_text)
+      fn <- sum(lengths(actual))
+    }
+    
+    return(str_c(tp, fp, fn, sep = ','))
+  }
+  
+  actual <- get_relations_from_recorded(microsp_in_text, hosts_in_text)
+  pred <- get_relations_from_predicted(pred_relations)
+  
+  for (pred_microsp in names(pred)) {
+    # no actual recorded microsporidia names are a substring of this one, so
+    # treat all relations with this microsporidia as false positives
+    if (!any(str_detect(pred_microsp, names(actual)))) {
+      fp <- fp + length(pred[[pred_microsp]])
+      
+    } else {
+      # get corresponding actual microsporidia entry for this prediction
+      matching_microsp <- names(actual)[which(str_detect(pred_microsp, names(actual)))[1]]
+      
+      # for any predicted host that has a recorded host for the recorded microsporidia
+      # as a substring, treat as true positivre
+      #
+      # other, treat as false positive
+      for (host in pred[[pred_microsp]]) {
+        if (!any(str_detect(host, actual[[matching_microsp]]))) {
+          fp <- fp + 1
+        } else {
+          tp <- tp + 1
+        }
+      }
+      
+      # any recorded host for this microsporidia that wasn't predicted are false
+      # negatives
+      for (host in actual[[matching_microsp]]) {
+        if (!any(str_detect(pred[[pred_microsp]], host))) {
+          fn <- fn + 1
+        }
+      }
+    }
+  }
+  
+  # any microsporidia (+ all their associated hosts) that weren't predicted
+  # are false negatives
+  for (microsp in names(actual)) {
+    if (!any(str_detect(names(pred), microsp))) {
+      fn <- fn + length(actual[[microsp]])
+    }
+  }
+  
+  return(str_c(tp, fp, fn, sep = ','))
+}
+
+
+microsp_host_relations <- read_csv('../../results/naive_microsporidia_and_host_name_predictions.csv') %>%
+  select(-`...1`, -species, -microsp_in_text_matches, -hosts_in_text_matches,
+         -pred_microsp, -pred_hosts) %>%
+  rowwise() %>%
+  mutate(tp_fp_fn = get_relations_tp_fp_fn(microsp_in_text,
+                                           hosts_in_text,
+                                           relations))
 
 ################################################################################
 

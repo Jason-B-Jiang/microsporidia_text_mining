@@ -3,7 +3,7 @@
 # Predict microsporidia species names + hosts from paper titles + abstracts
 #
 # Jason Jiang - Created: 2022/05/19
-#               Last edited: 2022/09/23
+#               Last edited: 2022/10/11
 #
 # Mideo Lab - Microsporidia text mining
 #
@@ -17,7 +17,7 @@ import pandas as pd
 from taxonerd import TaxoNERD
 import spacy
 from spacy.matcher import Matcher
-from typing import Tuple, Union, Dict, Set
+from typing import Tuple, Union, List, Dict, Set
 import numpy as np
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
@@ -50,16 +50,16 @@ DOC_CACHE = {}
 ## Define regex patterns for detecting new Microsporidia species
 
 # all microsporidia genus names from NCBI
-MICROSP_GENUSES = pd.read_csv(
-    '../../../data/microsp_genuses/microsporidia_genuses.tsv',
+MICROSP_GENUSES = \
+    pd.read_csv('../../../data/microsp_genuses/microsporidia_genuses.tsv',
         sep='\t')['name'].tolist()
 
-# conventional ways of indicating new species/genuses
-NEW_SPECIES_INDICATORS = \
-    [r'( [Nn](ov|OV)?(\.|,) ?[Gg](en|EN)?(\.|,))?( and | et |, )? ?[Nn](ov|OV)?(\.|,) ?[Ss][Pp](\.|,)',
-    r'( [Gg](en|EN)?(\.|,) ?[Nn](ov|OV)?(\.|,))?( and |et |, )? ?[Ss][Pp](\.|,) ?[Nn](ov|OV)?(\.|,)']
+MICROSP_GENUSES = f"({'|'.join(MICROSP_GENUSES)})"
 
-NEW_SPECIES_INDICATORS =  r'{}'.format('(' + '|'.join(NEW_SPECIES_INDICATORS) + ')')
+# conventional ways of indicating new species
+# ex: sp. n, nov. sp., sp. nov., sp. n.
+NEW_SPECIES_INDICATORS = \
+    r' ([Nn](OV|ov)?(\.|,) (SP|sp)(\.|,)|(SP|sp)(\.|,) [Nn](OV|ov)?(\.|,))'
 
 ################################################################################
 
@@ -143,47 +143,61 @@ def predict_microsp_and_hosts(txt: str) -> Tuple[str, str]:
         Empty string when there's no predictions for Microsporidia or hosts
 
     """
-    # fetch cached predictions for this text, if possible
+    # fetch cached taxonerd predictions for this text, if possible
     if txt in PREDICTIONS_CACHE:
-        return PREDICTIONS_CACHE[txt]
+        pred_taxons = PREDICTIONS_CACHE[txt]
+    else:
+        pred_taxons = format_taxonerd_predictions(taxonerd.find_in_text(txt))
+        PREDICTIONS_CACHE[txt] = pred_taxons
 
-    # get all predicted taxonomic names from txt w/ TaxoNERD
-    try:
-        pred_taxons = list(set(list(taxonerd.find_in_text(txt)['text'])))
-    except KeyError:  # no taxonerd predicted taxons from text
-        PREDICTIONS_CACHE[txt] = '', ''
-        return '', ''
+    # predict microsporidia based on presence of known microsporidia genus
+    # name in prediction
+    microsp = [pred for pred in pred_taxons if re.search(MICROSP_GENUSES, pred[0])]
+    microsp = microsp + \
+        [pred for pred in pred_taxons if any([is_abbrev(pred[0], m[0]) for m in microsp])]
+    
+    # predict microsporidia based on taxons followed by new species indicators
+    new_sp_spans = list(re.finditer(NEW_SPECIES_INDICATORS, txt))
+    microsp = microsp + \
+        [pred for pred in pred_taxons if any(
+            [m.start() - pred[2] > 0 and m.start() - pred[2] < 15 for m in new_sp_spans]
+        )]
+
+    # all non-microsporidia predicted taxons are treated as hosts
+    hosts = [pred for pred in pred_taxons if pred not in microsp]
+
+    # return unique predicted microsporidia and host names, in that order
+    return '; '.join(list(set([m[0] for m in microsp]))), \
+        '; '.join(list(set(h[0] for h in hosts)))
+
+
+def format_taxonerd_predictions(taxonerd_preds: pd.core.frame.DataFrame) -> \
+    List[Tuple[str, int, int]]:
+    formatted_preds = []
+    for i in range(len(taxonerd_preds)):
+        text = taxonerd_preds['text'][i]
+        bounds = [int(j) for j in taxonerd_preds['offsets'][i].split()[1:]]
+        formatted_preds.append((text, bounds[0], bounds[1]))
 
     # filter out obvious false positives
     # i.e 'microsporidia', 'microsporidium', or a family/order name (as indicated
     # # by a single token ending in 'ae')
-    pred_taxons = [pred for pred in pred_taxons if pred not in \
+    formatted_preds = [pred for pred in formatted_preds if pred[0] not in \
         {'Microsporidia', 'microsporidia', 'Microsporidium', 'microsporidium',
-        'Microsporida', 'microsporida'} and not (len(pred.split()) == 1 and \
-            re.search('ae$', pred) is not None)]
+        'Microsporida', 'microsporida'} and not (len(pred[0].split()) == 1 and \
+            re.search('ae$', pred[0]) is not None)]
 
-    # start finding microsporidia taxons, looking for taxons w/ known Microsporidia
-    # genus names, or taxons followed by a new species indicator in txt
-    microsp = []
-    for pred in pred_taxons:
-        if pred in microsp:  # encountered abbreviated name for microsporidia name
-            continue         # previously detected, possibly
+    return formatted_preds
 
-        elif any([genus in pred for genus in MICROSP_GENUSES]) or \
-            re.search(re.escape(pred) + NEW_SPECIES_INDICATORS, txt) is not None:
-            microsp.append(pred)
 
-            abbrev_name = get_abbreviated_species_name(pred)
-            if pred != abbrev_name and abbrev_name in pred_taxons:
-                microsp.append(abbrev_name)
-
-    # naively predict hosts as any predicted taxons that aren't a Microsporidia
-    # species
-    hosts = [pred for pred in pred_taxons if pred not in microsp]
-
-    # store predictions for text in cache and return it
-    PREDICTIONS_CACHE[txt] = '; '.join(microsp), '; '.join(hosts)
-    return PREDICTIONS_CACHE[txt]
+def is_abbrev(s1, s2):
+    """Check if s1 is an abbreviated name to s2."""
+    s2_abbrev = get_abbreviated_species_name(s2)
+    if (s1 in s2_abbrev) or (s1 in s2_abbrev.replace(' ', '')) or \
+        (s2_abbrev in s1) or (s2_abbrev.replace(' ', '') in s1):
+        return True
+    
+    return False
 
 
 def get_abbreviated_species_name(species: str) -> str:

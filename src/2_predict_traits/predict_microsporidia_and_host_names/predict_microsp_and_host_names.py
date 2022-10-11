@@ -232,6 +232,10 @@ def get_verbs_in_microsp_and_host_sentences(txt: str, microsp: str, hosts: str) 
     Return NaN if no sentences containing both microsporidia and hosts, or
     no verbs all in such sentences
     """
+    # remove new species indicators, as well as new genus indicators from
+    # the text, as these tend to screw up sentencization
+    txt = re.sub(NEW_SPECIES_INDICATORS, '', txt)
+    txt = re.sub(' ([Nn](ov|OV)?(\.|,) [Gg](en|EN)?(\.|,)|[Gg](en|EN)?(\.|,) [Nn](ov|OV)?(\.|,))', '', txt)
     doc = get_cached_document(txt)
 
     try:

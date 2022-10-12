@@ -3,7 +3,7 @@
 # Predict microsporidia species names + hosts from paper titles + abstracts
 #
 # Jason Jiang - Created: 2022/05/19
-#               Last edited: 2022/10/11
+#               Last edited: 2022/10/12
 #
 # Mideo Lab - Microsporidia text mining
 #
@@ -41,8 +41,6 @@ try:  # get cached microsporidia/host predictions for texts, if exists
 except FileNotFoundError:
     PREDICTIONS_CACHE = {}
 
-EXCLUDED_VERBS = {'propose', 'name', 'have', 'ribosomal', 'know', 'suggest'}
-
 DOC_CACHE = {}
 
 ################################################################################
@@ -56,10 +54,16 @@ MICROSP_GENUSES = \
 
 MICROSP_GENUSES = f"({'|'.join(MICROSP_GENUSES)})"
 
-# conventional ways of indicating new species
+# conventional ways of indicating new species/genuses
 # ex: sp. n, nov. sp., sp. nov., sp. n.
 NEW_SPECIES_INDICATORS = \
-    r' ([Nn](OV|ov)?(\.|,) (SP|sp)(\.|,)|(SP|sp)(\.|,) [Nn](OV|ov)?(\.|,))'
+    r' ([Nn](OV|ov)?(\.|,) ?(SP|sp)(\.|,)|(SP|sp)(\.|,) ?[Nn](OV|ov)?(\.|,))'
+
+NEW_GENUS_INDICATORS = \
+    r' ([Nn](ov|OV)?(\.|,) ?[Gg](en|EN)?(\.|,)|[Gg](en|EN)?(\.|,) ?[Nn](ov|OV)?(\.|,))'
+
+# verbs in microsporidia/host sentences to exclude (not informative)
+EXCLUDED_VERBS = {'ribosomal', 'fly'}
 
 ################################################################################
 
@@ -235,7 +239,7 @@ def get_verbs_in_microsp_and_host_sentences(txt: str, microsp: str, hosts: str) 
     # remove new species indicators, as well as new genus indicators from
     # the text, as these tend to screw up sentencization
     txt = re.sub(NEW_SPECIES_INDICATORS, '', txt)
-    txt = re.sub(' ([Nn](ov|OV)?(\.|,) [Gg](en|EN)?(\.|,)|[Gg](en|EN)?(\.|,) [Nn](ov|OV)?(\.|,))', '', txt)
+    txt = re.sub(NEW_GENUS_INDICATORS, '', txt)
     doc = get_cached_document(txt)
 
     try:
@@ -312,7 +316,7 @@ def make_verb_wordcloud(microsp_and_host_names: pd.core.frame.DataFrame) \
 ## Helper functions for rule-based relation extraction between Microsporidia and
 ## host entities
 
-def make_trigger_words_matcher(verb_freqs: pd.core.frame.DataFrame, n: int = 15) -> \
+def make_trigger_words_matcher(verb_freqs: pd.core.frame.DataFrame, n: int = 20) -> \
     spacy.matcher.matcher.Matcher:
     """Return a spaCy matcher 
     """
@@ -401,3 +405,8 @@ def get_relations_str(relations: Dict[str, Set[str]]) -> str:
 
 if __name__ == '__main__':
     main()
+
+# Notes to self:
+# 'Morphological and molecular characterization of Antonospora scoticae n. gen., n. sp. (Protozoa, microsporidia) a parasite of the communal bee, Andrena scotica'
+# 'Morphological and molecular characterization of Antonospora scoticae, (Protozoa, microsporidia) a parasite of the communal bee, Andrena scotica'
+# No verbs in sentence

@@ -3,7 +3,7 @@
 # Create labelled microsporidia species + host spans for NER training
 #
 # Jason Jiang - Created: 2022/08/01
-#               Last edited: 2022/08/26
+#               Last edited: 2022/10/20
 #
 # Mideo Lab - Microsporidia text mining
 #
@@ -15,6 +15,7 @@ import re
 import spacy
 from spacy.tokens import DocBin
 import random
+import json
 from pathlib import Path
 
 ################################################################################
@@ -45,6 +46,11 @@ def main() -> None:
         # save training, validation and testing data for each split as spaCy
         # 3 binary files (i.e: .spacy files)
         write_to_spacy_file(data_splits[split], split)
+
+    # write jsonl file of training documents, for pretraining models
+    with open('pretrain.jsonl', 'w') as out:
+        for doc in data_splits['train']:
+            out.write(json.dumps({"text": doc.text}) + "\n")
 
 ################################################################################
 

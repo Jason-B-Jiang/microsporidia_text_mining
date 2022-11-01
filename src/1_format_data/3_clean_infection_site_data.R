@@ -2,10 +2,17 @@ library(tidyverse)
 
 ################################################################################
 
+clean_host_data <- Vectorize(function(hosts) {
+  hosts <- str_split(hosts, '; ')[[1]]
+  hosts <- sapply(hosts, function(h) {str_remove(h, ' \\(.+')})
+  return(str_c(hosts, collapse = '; '))
+})
+
 microsp_infection_sites <- read_csv('../../data/microsporidia_species_and_abstracts.csv',
                                     show_col_types = F) %>%
   select(species, title_abstract, hosts, infection_site) %>%
-  filter(!is.na(title_abstract))
+  filter(!is.na(title_abstract)) %>%
+  mutate(hosts = clean_host_data(hosts))
 
 ################################################################################
 
@@ -42,9 +49,9 @@ manually_corrected_species <- read_csv('../../data/manually_corrected_hosts_and_
   select(species, species_cleaned, microsp_not_in_text, microsp_not_in_text_corrected,
          title_abstract, hosts_cleaned, hosts_not_in_text,
          hosts_not_in_text_corrected) %>%
-  mutate(species_final = merge_recorded_and_corrected(species_cleaned,
-                                                      microsp_not_in_text,
-                                                      microsp_not_in_text_corrected),
+  mutate(species_final = ifelse(!is.na(microsp_not_in_text),
+                                microsp_not_in_text_corrected,
+                                species_cleaned),
          hosts_final = merge_recorded_and_corrected(hosts_cleaned,
                                                     hosts_not_in_text,
                                                     hosts_not_in_text_corrected))
@@ -64,7 +71,7 @@ microsp_infection_sites <- microsp_infection_sites %>%
   rowwise() %>%
   mutate(species_corrected = ifelse(species %in% manually_corrected_species$species,
                                     species_corrections[[species]][1],
-                                    species),
+                                    str_remove(species, ' (\\d+|\\(.+\\))$')),
          hosts_corrected = ifelse(species %in% manually_corrected_species$species,
                                   species_corrections[[species]][2],
                                   hosts)) %>%
@@ -111,7 +118,7 @@ remove_parenthesized_info <- function(infection_site) {
 get_entries_not_in_text <- Vectorize(function(entries, text) {
   entries <- str_split(entries, '; ')[[1]]
   
-  not_in_text <- entries[!str_detect(text, entries)]
+  not_in_text <- entries[!str_detect(tolower(text), tolower(entries))]
   
   return_str = str_c(not_in_text, collapse = '; ')
   return(ifelse(return_str == '', NA, return_str))
@@ -124,4 +131,17 @@ microsp_infection_sites <- microsp_infection_sites %>%
          parenthesized_not_in_text = get_entries_not_in_text(infection_site_parenthesized,
                                                              title_abstract),
          infection_site_not_in_text = get_entries_not_in_text(infection_site,
-                                                              title_abstract))
+                                                              title_abstract),
+         parenthesized_corrected = NA,
+         infection_site_corrected = NA) %>%
+  select(species, title_abstract, species_corrected, hosts_corrected, infection_site,
+         infection_site_parenthesized, infection_site_not_in_text,
+         parenthesized_not_in_text, infection_site_corrected,
+         parenthesized_corrected) %>%
+  filter(!(species_corrected %in% c('Microsporidium 1', 'Microsporidium 2')))
+
+# TODO - add new species to check from additional condition
+to_check <- microsp_infection_sites %>%
+  filter(!is.na(parenthesized_not_in_text) | !is.na(infection_site_not_in_text) | str_detect(hosts_corrected, ';'))
+
+write_csv(to_check, 'manually_corrected_infection_sites.csv')

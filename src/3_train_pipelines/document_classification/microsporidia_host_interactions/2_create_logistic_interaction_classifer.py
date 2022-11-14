@@ -14,6 +14,7 @@ import pickle
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
 from sklearn.model_selection import KFold
@@ -73,8 +74,8 @@ for train, test in kf_split:
     fp_pos = np.sum([x[0] == 0 and x[1] == 1 for x in zipped_pred_and_labels])
     fn_pos = np.sum([x[0] == 1 and x[1] == 0 for x in zipped_pred_and_labels])
 
-    precision_pos_ = (tp_pos / (tp_pos + fp_pos)) * 100
-    recall_pos_ = (tp_pos / (tp_pos + fn_pos)) * 100
+    precision_pos_ = (tp_pos / (tp_pos + fp_pos))
+    recall_pos_ = (tp_pos / (tp_pos + fn_pos))
 
     precision_pos.append(precision_pos_)
     recall_pos.append(recall_pos_)
@@ -88,14 +89,14 @@ for train, test in kf_split:
     fp_neg = np.sum([x[0] == 1 and x[1] == 0 for x in zipped_pred_and_labels])
     fn_neg = np.sum([x[0] == 0 and x[1] == 1 for x in zipped_pred_and_labels])
 
-    precision_neg_ = (tp_neg / (tp_neg + fp_neg)) * 100
-    recall_neg_ = (tp_neg / (tp_neg + fn_neg)) * 100
+    precision_neg_ = (tp_neg / (tp_neg + fp_neg))
+    recall_neg_ = (tp_neg / (tp_neg + fn_neg))
 
     precision_neg.append(precision_neg_)
     recall_neg.append(recall_neg_)
     f1_neg.append(2 * ((precision_neg_ * recall_neg_) / (precision_neg_ + recall_neg_)))
 
-baseline_performance_df = dict(pd.DataFrame({
+baseline_performance = dict(pd.DataFrame({
     'precision_pos': precision_pos,
     'precision_neg': precision_neg,
     'recall_pos': recall_pos,
@@ -104,6 +105,12 @@ baseline_performance_df = dict(pd.DataFrame({
     'f1_neg': [0.0 if np.isnan(f1) else f1 for f1 in f1_neg]
 }).mean())
 
+baseline_performance_df = pd.DataFrame({
+    'precision': [baseline_performance['precision_pos'], baseline_performance['precision_neg']],
+    'recall': [baseline_performance['recall_pos'], baseline_performance['recall_neg']],
+    'f1': [baseline_performance['f1_pos'], baseline_performance['f1_neg']],
+    'class': ['pos', 'neg']
+})
 
 ###############################################################################
 
@@ -158,15 +165,11 @@ for param in param_grid:
 
 # Create dataframe of performance metrics for each logistic model
 model_performance_df = pd.DataFrame({
-    'class_weights': class_weights,
-    'n_pos': n_pos,
-    'n_neg': n_neg,
-    'precision_pos': precision_pos,
-    'precision_neg': precision_neg,
-    'recall_pos': recall_pos,
-    'recall_neg': recall_neg,
-    'f1_pos': f1_pos,
-    'f1_neg': f1_neg
+    'weights': class_weights * 2,
+    'precision': precision_pos + precision_neg,
+    'recall': recall_pos + recall_neg,
+    'f1': f1_pos + f1_neg,
+    'class': ['pos'] * 70 + ['neg'] * 70
 })
 
 # Dataframe for average model performance for each set of class weights
@@ -179,6 +182,31 @@ param_rankings = {'negative: 8.0, positive: 1.0': 0,
                   'negative: 1.0, positive: 8.0': 6}
 
 avg_model_performance = \
-    model_performance_df.groupby(['class_weights']).mean().reset_index().sort_values(
-        by='class_weights', key=lambda col: col.map(param_rankings)
+    model_performance_df.groupby(['weights', 'class']).mean().reset_index().sort_values(
+        by='weights', key=lambda col: col.map(param_rankings)
+    ).reset_index()
+
+###############################################################################
+
+## Plot performance metrics for logistic + baseline models
+
+baseline_performance_df['weights'] = 'naive baseline'
+combined_df = pd.concat(
+    [baseline_performance_df,
+     avg_model_performance.loc[:, avg_model_performance.columns != 'index']]
     )
+
+sns.barplot(data=combined_df, x='weights', y='f1', hue='class')
+plt.xticks(rotation=90)
+plt.savefig("f1.png", bbox_inches='tight')
+plt.clf()
+
+sns.barplot(data=combined_df, x='weights', y='precision', hue='class')
+plt.xticks(rotation=90)
+plt.savefig("precision.png", bbox_inches='tight')
+plt.clf()
+
+sns.barplot(data=combined_df, x='weights', y='recall', hue='class')
+plt.xticks(rotation=90)
+plt.savefig("recall.png", bbox_inches='tight')
+plt.clf()

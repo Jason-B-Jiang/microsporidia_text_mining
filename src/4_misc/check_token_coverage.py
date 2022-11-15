@@ -12,6 +12,7 @@
 import spacy
 import pandas as pd
 import numpy as np
+import pickle
 
 texts = pd.read_csv('../../data/microsporidia_species_and_abstracts.csv')
 texts = texts['title_abstract'].dropna().unique()
@@ -30,3 +31,11 @@ for model in MODELS:
     doc = nlp(texts_str)
     models_oov[model] = \
         np.sum([tok.is_oov for tok in doc]) / len(doc)
+
+################################################################################
+
+## Save models_oov dictionary of % out-of-vocab tokens from each model as pkl
+## file
+
+with open('models_oov.pickle', 'wb') as f:
+    pickle.dump(models_oov, f)

@@ -4,7 +4,7 @@
 # host interactions
 #
 # Jason Jiang - Created: 2022/11/10
-#               Last edited: 2022/11/14
+#               Last edited: 2022/11/25
 #
 # Mideo Lab - Microsporidia text mining
 #
@@ -25,20 +25,8 @@ from sklearn.model_selection import KFold
 with open('labelled_interactions.pickle', 'rb') as f:
     labelled_dataset = pickle.load(f)
 
-data = np.array([entry[2].astype(int) for entry in labelled_dataset])
-labels = np.array([int(entry[1]) for entry in labelled_dataset])
-
-###############################################################################
-
-## Rule-based baseline
-
-def naive_classifier(x: np.ndarray) -> np.ndarray:
-    # For a 2D array of candidate word appearances in text, return a 1D array
-    # with 1 or 0 for each original row
-    #
-    # 1 = >=1 candidate word appears in text
-    # 0 = no candidate words appear in text
-    return np.sum(x, axis=1).astype(dtype=bool).astype(dtype=int)
+data = np.array([entry['vector'] for entry in labelled_dataset])
+labels = np.array([int(entry['label']) for entry in labelled_dataset])
 
 ###############################################################################
 
@@ -49,72 +37,7 @@ kf_split = tuple(kf.split(labelled_dataset))
 
 ###############################################################################
 
-## Evaluate our rule-based baseline for classifying positive/negative documents
-
-precision_pos = []
-precision_neg = []
-recall_pos = []
-recall_neg = []
-f1_pos = []
-f1_neg = []
-
-for train, test in kf_split:
-    # only need test data, as we don't need to train our rule-based baseline
-    test_data, test_labels = data[test], labels[test]
-    naive_preds = naive_classifier(test_data)
-
-    # create zipped list, where each tuple has predicted label and actual label
-    zipped_pred_and_labels = list(zip(list(test_labels), list(naive_preds)))
-
-    # positives:
-    # tp: label = 1 and pred = 1
-    # fp: label = 0 and pred = 1
-    # fn: label = 1 and pred = 0
-    tp_pos = np.sum([x[0] == 1 and x[1] == 1 for x in zipped_pred_and_labels])
-    fp_pos = np.sum([x[0] == 0 and x[1] == 1 for x in zipped_pred_and_labels])
-    fn_pos = np.sum([x[0] == 1 and x[1] == 0 for x in zipped_pred_and_labels])
-
-    precision_pos_ = (tp_pos / (tp_pos + fp_pos))
-    recall_pos_ = (tp_pos / (tp_pos + fn_pos))
-
-    precision_pos.append(precision_pos_)
-    recall_pos.append(recall_pos_)
-    f1_pos.append(2 * ((precision_pos_ * recall_pos_) / (precision_pos_ + recall_pos_)))
-
-    # negatives:
-    # tp: label = 0 and pred = 0
-    # fp: label = 1 and pred = 0
-    # fn: label = 0 and pred = 1
-    tp_neg = np.sum([x[0] == 0 and x[1] == 0 for x in zipped_pred_and_labels])
-    fp_neg = np.sum([x[0] == 1 and x[1] == 0 for x in zipped_pred_and_labels])
-    fn_neg = np.sum([x[0] == 0 and x[1] == 1 for x in zipped_pred_and_labels])
-
-    precision_neg_ = (tp_neg / (tp_neg + fp_neg))
-    recall_neg_ = (tp_neg / (tp_neg + fn_neg))
-
-    precision_neg.append(precision_neg_)
-    recall_neg.append(recall_neg_)
-    f1_neg.append(2 * ((precision_neg_ * recall_neg_) / (precision_neg_ + recall_neg_)))
-
-baseline_performance = dict(pd.DataFrame({
-    'precision_pos': precision_pos,
-    'precision_neg': precision_neg,
-    'recall_pos': recall_pos,
-    'recall_neg': recall_neg,
-    'f1_pos': [0.0 if np.isnan(f1) else f1 for f1 in f1_pos],
-    'f1_neg': [0.0 if np.isnan(f1) else f1 for f1 in f1_neg]
-}).mean())
-
-baseline_performance_df = pd.DataFrame({
-    'precision': [baseline_performance['precision_pos'], baseline_performance['precision_neg']],
-    'recall': [baseline_performance['recall_pos'], baseline_performance['recall_neg']],
-    'f1': [baseline_performance['f1_pos'], baseline_performance['f1_neg']],
-    'class': ['pos', 'neg']
-})
-
-###############################################################################
-
-## Logistic regression models for predicting positive/negative texts
+## Weighted lasso logistic regression model for predicting interactions
 
 # Set up class weights for positive and negative classes for parameter grid
 # search
@@ -133,20 +56,24 @@ recall_neg = []
 f1_pos = []
 f1_neg = []
 
-for param in param_grid:
-    i = 1
+i = 0
+models = {}
 
+for param in param_grid:
     # ensure we use the same 10-fold dataset split when testing each set of
     # class weights
     for train, test in kf_split:
         train_data, train_labels = data[train], labels[train]
         test_data, test_labels = data[test], labels[test]
 
-        model = LogisticRegression(solver='liblinear', random_state=42,
-                                   class_weight=param).fit(train_data,
-                                                           train_labels)
+        model = LogisticRegression(solver='liblinear',
+                                   random_state=42,
+                                   class_weight=param,
+                                   penalty='l1').fit(train_data,
+                                                     train_labels)
 
-        model_stats = classification_report(test_labels, model.predict(test_data),
+        model_stats = classification_report(test_labels,
+                                            model.predict(test_data),
                                             output_dict=True)
 
         class_weights.append(f"negative: {param[0]}, positive: {param[1]}")
@@ -159,6 +86,7 @@ for param in param_grid:
         f1_pos.append(model_stats['1']['f1-score'])
         f1_neg.append(model_stats['0']['f1-score'])
 
+        models[i] = model
         i += 1
 
 ###############################################################################
@@ -188,25 +116,22 @@ avg_model_performance = \
 
 ###############################################################################
 
-## Plot performance metrics for logistic + baseline models
+## Plot performance metrics for trained logistic model
 
-baseline_performance_df['weights'] = 'naive baseline'
-combined_df = pd.concat(
-    [baseline_performance_df,
-     avg_model_performance.loc[:, avg_model_performance.columns != 'index']]
-    )
-
-sns.barplot(data=combined_df, x='weights', y='f1', hue='class')
-plt.xticks(rotation=90)
+p1 = sns.barplot(data=avg_model_performance, x='weights', y='f1', hue='class')
+p1.set(xlabel=None)
+plt.xticks(rotation=45, ha='right', rotation_mode='anchor')
 plt.savefig("f1.png", bbox_inches='tight')
 plt.clf()
 
-sns.barplot(data=combined_df, x='weights', y='precision', hue='class')
-plt.xticks(rotation=90)
+p2 = sns.barplot(data=avg_model_performance, x='weights', y='precision', hue='class')
+p2.set(xlabel=None)
+plt.xticks(rotation=45, ha='right', rotation_mode='anchor')
 plt.savefig("precision.png", bbox_inches='tight')
 plt.clf()
 
-sns.barplot(data=combined_df, x='weights', y='recall', hue='class')
-plt.xticks(rotation=90)
+p3 = sns.barplot(data=avg_model_performance, x='weights', y='recall', hue='class')
+p3.set(xlabel=None)
+plt.xticks(rotation=45, ha='right', rotation_mode='anchor')
 plt.savefig("recall.png", bbox_inches='tight')
 plt.clf()

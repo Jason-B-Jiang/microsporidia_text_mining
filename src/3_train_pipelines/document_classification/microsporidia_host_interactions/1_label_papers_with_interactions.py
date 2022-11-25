@@ -62,6 +62,10 @@ def main() -> None:
     # as a pickle object
     with open('labelled_interactions.pickle', 'wb') as f:
         pickle.dump(labelled_dataset, f, protocol=pickle.HIGHEST_PROTOCOL)
+    
+    # write text file for top n words found across documents
+    with open('top_n_words.txt', 'w') as f:
+        f.writelines([w + '\n' for w in top_n_words])
 
 ###############################################################################
 
@@ -208,5 +212,5 @@ def make_labelled_dataset(doc_words: List[Tuple[spacy.tokens.doc.Doc, List[str]]
 
 ###############################################################################
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

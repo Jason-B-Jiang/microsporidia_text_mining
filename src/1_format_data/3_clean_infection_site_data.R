@@ -145,3 +145,88 @@ to_check <- microsp_infection_sites %>%
   filter(!is.na(parenthesized_not_in_text) | !is.na(infection_site_not_in_text) | str_detect(hosts_corrected, ';'))
 
 write_csv(to_check, 'manually_corrected_infection_sites.csv')
+
+################################################################################
+
+## Incorporate corrected infection sites into microsp_infection_sites
+
+corrected <- read_csv('manually_corrected_infection_sites_CORRECTED.csv')
+
+get_final_infection_site <- function(infection_site,
+                                     infection_site_parenthesized,
+                                     infection_site_not_in_text,
+                                     parenthesized_not_in_text,
+                                     infection_site_corrected,
+                                     parenthesized_corrected) {
+  # convert each argument into a vector, so we can do set operations
+  # also make everything lowercase so matches are case-insensitive
+  ifelse(!is.na(infection_site),
+         infection_site <- tolower(str_split(infection_site, '; ')[[1]]),
+         infection_site <- character(0))
+  
+  ifelse(!is.na(infection_site_parenthesized),
+         infection_site_parenthesized <- tolower(str_split(infection_site_parenthesized, '; ')[[1]]),
+         infection_site_parenthesized <- character(0))
+  
+  ifelse(!is.na(infection_site_not_in_text),
+         infection_site_not_in_text <- tolower(str_split(infection_site_not_in_text, '; ')[[1]]),
+         infection_site_not_in_text <- character(0))
+  
+  ifelse(!is.na(parenthesized_not_in_text),
+         parenthesized_not_in_text <- tolower(str_split(parenthesized_not_in_text, '; ')[[1]]),
+         parenthesized_not_in_text <- character(0))
+  
+  ifelse(!is.na(infection_site_corrected),
+         infection_site_corrected <- tolower(str_split(infection_site_corrected, '; ')[[1]]),
+         infection_site_corrected <- character(0))
+  
+  ifelse(!is.na(parenthesized_corrected),
+         parenthesized_corrected <- tolower(str_split(parenthesized_corrected, '; ')[[1]]),
+         parenthesized_corrected <- character(0))
+  
+  all_sites <- union(infection_site, infection_site_parenthesized)
+  not_in_text <- union(infection_site_not_in_text, parenthesized_not_in_text)
+  in_text <- union(infection_site_corrected, parenthesized_corrected)
+  
+  # subtract sites not found in text from all sites, then add back in corrected
+  # sites that are found in the text for our final set of infection sites
+  final_sites <- union(setdiff(all_sites, not_in_text), in_text)
+  
+  if (length(final_sites) < 1) {
+    return(NA)
+  }
+  
+  return(str_c(final_sites, collapse = '; '))
+}
+
+corrected <- corrected %>%
+  rowwise() %>%
+  # if we have multiple hosts recorded for a species, just replace the
+  # entry with infection_site_corrected
+  mutate(infection_site_final = ifelse(str_detect(hosts_corrected, '; ') & !is.na(hosts_corrected),
+                                       tolower(infection_site_corrected),
+                                       get_final_infection_site(infection_site,
+                                                                infection_site_parenthesized,
+                                                                infection_site_not_in_text,
+                                                                parenthesized_not_in_text,
+                                                                infection_site_corrected,
+                                                                parenthesized_corrected)))
+
+# create hashmap/dictionary of microsporidia species and their corrected
+# infection sites
+corrected_dict <- new.env()
+Map(function(species, corrected_sites) {corrected_dict[[species]] <- corrected_sites},
+    corrected$species,
+    corrected$infection_site_final)
+
+# apply corrections to microsp_infection_sites
+microsp_infection_sites <- microsp_infection_sites %>%
+  rowwise() %>%
+  mutate(infection_site_corrected = ifelse(!is.null(corrected_dict[[species_corrected]]),
+                                       corrected_dict[[species_corrected]],
+                                       tolower(infection_site))) %>%
+  select(species, title_abstract, species_corrected, hosts_corrected,
+         infection_site, infection_site_corrected)
+
+# save corrections as csv
+write_csv(microsp_infection_sites, '../../data/microsp_infection_sites.csv')

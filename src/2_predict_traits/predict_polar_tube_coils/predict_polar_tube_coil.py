@@ -39,9 +39,9 @@ matcher = Matcher(nlp.vocab)
 
 coil_pattern = [
     {'POS': 'NUM'},
-    {'TEXT': {'REGEX': ".+"}, 'OP': '{,3}'},
+    {'TEXT': {'REGEX': ".+"}, 'OP': '{,2}'},
     {'POS': 'NUM', 'OP': '?'},
-    {'TEXT': {'REGEX': ".+"}, 'OP': '{,3}'},
+    {'TEXT': {'REGEX': ".+"}, 'OP': '{,2}'},
     {'LEMMA': {'REGEX': '(coil|spire|twist|turn)'}}
 ]
 
@@ -77,7 +77,7 @@ def predict_polar_tube_measures(text: str) -> List[np.ndarray]:
 def get_sentence_coil_measure(sent: spacy.tokens.span.Span) -> np.ndarray:
     # corner case: uncoiled polar tube = 0 coils
     if re.search("(uncoiled|noncoiled|non-coiled)", sent.text.lower()):
-        return np.array([0])
+        return np.array([0.0])
 
     # get polar coil pattern matches within sentence
     matches = matcher(sent)
@@ -120,7 +120,6 @@ def format_coil_matches_as_numbers(resolved_matches: List[Tuple[int]],
 
 
 def convert_coil_measure_to_numeric(match: spacy.tokens.span.Span) -> np.ndarray:
-
     numeric_coil_measures = []
 
     for measure in [tok for tok in match if tok.pos_ == 'NUM']:
@@ -132,13 +131,13 @@ def convert_coil_measure_to_numeric(match: spacy.tokens.span.Span) -> np.ndarray
             if '/' in measure.text:
                  # fraction was not properly numerized
                 numeric_coil_measure = \
-                    int(match.text.split("/")[0]) / int(match.text.split("/")[1])
+                    float(measure.text.split("/")[0]) / float(measure.text.split("/")[1])
 
             elif re.search('\\d+.\\d+', measure.text):
                 # some kind of weirdly delimited coil range
                 split_ = re.split('[^0-9\\.]', measure.text)
                 numeric_coil_measure = \
-                    np.array([numerizer.numerize(split_[0]), numerizer.numerize(split_[1])])
+                    np.array([float(numerizer.numerize(split_[0])), float(numerizer.numerize(split_[1]))])
             
             else:
                 numeric_coil_measure = None
@@ -153,4 +152,18 @@ def convert_coil_measure_to_numeric(match: spacy.tokens.span.Span) -> np.ndarray
 if __name__ == '__main__':
     main()
 
-# predict_polar_tube_measures("The polar tube had 6 - 7 coils. The other polar filament appears as 15—18 coils in a single layer. A rare polar tubule had 7 posterior coils and 2 to 5 anterior coils. I also found a polar tube that was uncoiled.")
+# TODO - troubleshoot funny outputs
+
+pt_df = pd.read_csv('../../../data/polar_coil_data/polar_coils.csv')
+
+preds = []
+errors = []
+
+weird = """'A microsporidium was found infecting the fat body of larvae and adults of both sexes of Culex pipiens in Egypt. Developmental stages were found in larvae but only masses of spores were present in adults. The infection was easily visible in live mosquito larvae, as one or two blocks of opaque whitish fat body visible through the cuticle in each segment. Meronts were rounded cells, which were bounded by an unthickened unit membrane and divided by binary fission (rarely into four). At the onset of sporogony the surface membrane was thickened by electron dense deposits. This coat was sloughed off to form the sporophorous vesicle, the separation from the sporont surface being effected by the secretion of metabolic products into the sporophorous vesicle cavity. Division within the vesicle gave rise to eight uninucleate sporoblasts, then uninucleate spores. Spores exhibited an exospore of two membrane-like layers and a subtending layer of moderate electron density, appearing as eight to ten strata separated by fine lines and permeated by amorphous material, and an electron lucent endospore. The polar tube was anisofilar with 3–4 broad coils and 4–3 narrow coils. The development and spore structure were in accord with the genus Amblyospora Hazard and Oldacre, 1975 and, on the basis of spore size and number of coils of the polar tube, it is considered to be a new species, Amblyospora egypti n.sp.'"""
+
+for text in pt_df['abstract']:
+    try:
+        preds.append((text, predict_polar_tube_measures(text)))
+
+    except ValueError:
+        errors.append(text)

@@ -1,9 +1,10 @@
+
 # -----------------------------------------------------------------------------
 #
 # Predict microsporidia polar tube coil measures from texts
 #
 # Jason Jiang - Created: Feb/07/2023
-#               Last edited: Feb/13/2023
+#               Last edited: Mar/01/2023
 #
 # Mideo Lab - Microsporidia text mining
 #
@@ -65,7 +66,7 @@ def predict_polar_tube_measures(text: str) -> List[np.ndarray]:
     polar_coils = [
         get_sentence_coil_measure(sent) for sent in doc.sents if \
             re.search('polar +(tube|tubule|filament)', sent.text.lower()) and \
-                re.search('(coil|twist|turn|spire)', sent.text.lower())
+                matcher(sent)
     ]
 
     # for each sentence, treat as one "coil measure"
@@ -145,7 +146,7 @@ def convert_coil_measure_to_numeric(match: spacy.tokens.span.Span) -> np.ndarray
         if numeric_coil_measure is not None:
             numeric_coil_measures.append(numeric_coil_measure)
     
-    return np.array(numeric_coil_measures)
+    return np.sort(np.array(numeric_coil_measures).flatten())
 
 ###############################################################################
 
@@ -159,7 +160,7 @@ pt_df = pd.read_csv('../../../data/polar_coil_data/polar_coils.csv')
 preds = []
 errors = []
 
-weird = """'A microsporidium was found infecting the fat body of larvae and adults of both sexes of Culex pipiens in Egypt. Developmental stages were found in larvae but only masses of spores were present in adults. The infection was easily visible in live mosquito larvae, as one or two blocks of opaque whitish fat body visible through the cuticle in each segment. Meronts were rounded cells, which were bounded by an unthickened unit membrane and divided by binary fission (rarely into four). At the onset of sporogony the surface membrane was thickened by electron dense deposits. This coat was sloughed off to form the sporophorous vesicle, the separation from the sporont surface being effected by the secretion of metabolic products into the sporophorous vesicle cavity. Division within the vesicle gave rise to eight uninucleate sporoblasts, then uninucleate spores. Spores exhibited an exospore of two membrane-like layers and a subtending layer of moderate electron density, appearing as eight to ten strata separated by fine lines and permeated by amorphous material, and an electron lucent endospore. The polar tube was anisofilar with 3–4 broad coils and 4–3 narrow coils. The development and spore structure were in accord with the genus Amblyospora Hazard and Oldacre, 1975 and, on the basis of spore size and number of coils of the polar tube, it is considered to be a new species, Amblyospora egypti n.sp.'"""
+weird = """A microsporidium was found infecting the fat body of larvae and adults of both sexes of Culex pipiens in Egypt. Developmental stages were found in larvae but only masses of spores were present in adults. The infection was easily visible in live mosquito larvae, as one or two blocks of opaque whitish fat body visible through the cuticle in each segment. Meronts were rounded cells, which were bounded by an unthickened unit membrane and divided by binary fission (rarely into four). At the onset of sporogony the surface membrane was thickened by electron dense deposits. This coat was sloughed off to form the sporophorous vesicle, the separation from the sporont surface being effected by the secretion of metabolic products into the sporophorous vesicle cavity. Division within the vesicle gave rise to eight uninucleate sporoblasts, then uninucleate spores. Spores exhibited an exospore of two membrane-like layers and a subtending layer of moderate electron density, appearing as eight to ten strata separated by fine lines and permeated by amorphous material, and an electron lucent endospore. The polar tube was anisofilar with 3–4 broad coils and 4–3 narrow coils. The development and spore structure were in accord with the genus Amblyospora Hazard and Oldacre, 1975 and, on the basis of spore size and number of coils of the polar tube, it is considered to be a new species, Amblyospora egypti n.sp."""
 
 for text in pt_df['abstract']:
     try:
@@ -167,3 +168,10 @@ for text in pt_df['abstract']:
 
     except ValueError:
         errors.append(text)
+
+triple_array = 'Collections of the dicyemid mesozoan Kantharella antarctica were made in the Weddell Sea during the Antarctic Expedition of the research vessel B.V Polarstern in 1990 and 1991. A diplokaryotic microsporidian was found infecting all nematogens from all the samples taken in both years. The infected cells contained all developmental stages. Merogony initially was monokaryotic and sporogony of diplokaryotic sporonts was by multiple fission. The stained ovoidal spores measured between 4.3-6 μm x 1.7-2.3 μm. The ultrastructural findings come from 11 specimens of Kantharella antarctica that were cut in serial sections. All developmental stages were noteworthy because of the myelinosomes situated adjacent to each diplokaryon. Similarly conspicuous were some organelles in the spore: a prominent, extraordinarily electron dense anterior portion of the polaroplast and the posterior vacuole. The isofilar polar filament with a diameter of about i 15 nm showed 9-11 coils. The great number of empty spore cases together with an extruded polar filament are indicative of an autoinfection. Though these characteristics resemble in part those of the genus Nosema from the family Nosematidae, the species in Kantharella antarctica differs from the former by its unusual development, life cycle and unusual host. Thus, this new species has been placed in a new genus and the name Wittmannia antarctica proposed.'
+weird_zero = 'A microsporidium was found infecting the fat body of larvae and adults of both sexes of Culex pipiens in Egypt. Developmental stages were found in larvae but only masses of spores were present in adults. The infection was easily visible in live mosquito larvae, as one or two blocks of opaque whitish fat body visible through the cuticle in each segment. Meronts were rounded cells, which were bounded by an unthickened unit membrane and divided by binary fission (rarely into four). At the onset of sporogony the surface membrane was thickened by electron dense deposits. This coat was sloughed off to form the sporophorous vesicle, the separation from the sporont surface being effected by the secretion of metabolic products into the sporophorous vesicle cavity. Division within the vesicle gave rise to eight uninucleate sporoblasts, then uninucleate spores. Spores exhibited an exospore of two membrane-like layers and a subtending layer of moderate electron density, appearing as eight to ten strata separated by fine lines and permeated by amorphous material, and an electron lucent endospore. The polar tube was anisofilar with 3–4 broad coils and 4–3 narrow coils. The development and spore structure were in accord with the genus Amblyospora Hazard and Oldacre, 1975 and, on the basis of spore size and number of coils of the polar tube, it is considered to be a new species, Amblyospora egypti n.sp.'
+multiple_error_1 = 'Polar filaments, arranged in two rows, were anisofilar with two wider anterior coils, and five narrower posterior coils'
+multiple_error_2 = 'The polar filament is lightly anisofilar with 2-3 wide anterior coils, and 2-3 more narrow posterior coils, in a single layer of coils in the posterior half of the spore.'
+
+predict_polar_tube_measures(errors[0])

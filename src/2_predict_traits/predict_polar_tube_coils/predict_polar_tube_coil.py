@@ -4,7 +4,7 @@
 # Predict microsporidia polar tube coil measures from texts
 #
 # Jason Jiang - Created: Feb/07/2023
-#               Last edited: Mar/01/2023
+#               Last edited: Mar/02/2023
 #
 # Mideo Lab - Microsporidia text mining
 #
@@ -40,9 +40,9 @@ matcher = Matcher(nlp.vocab)
 
 coil_pattern = [
     {'POS': 'NUM'},
-    {'TEXT': {'REGEX': ".+"}, 'OP': '{,2}'},
+    {'TEXT': {'REGEX': "^(?!.m$).*"}, 'OP': '{,2}'},
     {'POS': 'NUM', 'OP': '?'},
-    {'TEXT': {'REGEX': ".+"}, 'OP': '{,2}'},
+    {'TEXT': {'REGEX': "^(?!.m$).*"}, 'OP': '{,2}'},
     {'LEMMA': {'REGEX': '(coil|spire|twist|turn)'}}
 ]
 
@@ -160,8 +160,6 @@ pt_df = pd.read_csv('../../../data/polar_coil_data/polar_coils.csv')
 preds = []
 errors = []
 
-weird = """A microsporidium was found infecting the fat body of larvae and adults of both sexes of Culex pipiens in Egypt. Developmental stages were found in larvae but only masses of spores were present in adults. The infection was easily visible in live mosquito larvae, as one or two blocks of opaque whitish fat body visible through the cuticle in each segment. Meronts were rounded cells, which were bounded by an unthickened unit membrane and divided by binary fission (rarely into four). At the onset of sporogony the surface membrane was thickened by electron dense deposits. This coat was sloughed off to form the sporophorous vesicle, the separation from the sporont surface being effected by the secretion of metabolic products into the sporophorous vesicle cavity. Division within the vesicle gave rise to eight uninucleate sporoblasts, then uninucleate spores. Spores exhibited an exospore of two membrane-like layers and a subtending layer of moderate electron density, appearing as eight to ten strata separated by fine lines and permeated by amorphous material, and an electron lucent endospore. The polar tube was anisofilar with 3–4 broad coils and 4–3 narrow coils. The development and spore structure were in accord with the genus Amblyospora Hazard and Oldacre, 1975 and, on the basis of spore size and number of coils of the polar tube, it is considered to be a new species, Amblyospora egypti n.sp."""
-
 for text in pt_df['abstract']:
     try:
         preds.append((text, predict_polar_tube_measures(text)))
@@ -174,4 +172,3 @@ weird_zero = 'A microsporidium was found infecting the fat body of larvae and ad
 multiple_error_1 = 'Polar filaments, arranged in two rows, were anisofilar with two wider anterior coils, and five narrower posterior coils'
 multiple_error_2 = 'The polar filament is lightly anisofilar with 2-3 wide anterior coils, and 2-3 more narrow posterior coils, in a single layer of coils in the posterior half of the spore.'
 
-predict_polar_tube_measures(errors[0])

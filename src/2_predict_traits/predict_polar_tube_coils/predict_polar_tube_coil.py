@@ -102,8 +102,8 @@ def resolve_overlapping_matches(matches: List[Tuple[int]]) -> List[Tuple[int]]:
 
     first_resolved = [m for m in matches if m is not None]
     for i in range(1, len(first_resolved)):
-        if first_resolved[i - 1][1] > first_resolved[i][0]:
-            first_resolved[i] = (first_resolved[i - 1][0], first_resolved[i][1])
+        if first_resolved[i - 1][2] > first_resolved[i][1]:
+            first_resolved[i] = (first_resolved[i][0], first_resolved[i - 1][1], first_resolved[i][2])
             first_resolved[i - 1] = None
     
     return [match for match in first_resolved if match is not None]
@@ -114,51 +114,44 @@ def format_coil_matches_as_numbers(resolved_matches: List[Tuple[int]],
     coil_measures = []
 
     for match in resolved_matches:
-        coil_measure = convert_coil_measure_to_numeric(sent[match[1] : match[2]])
-
-        # a half-coil was indicated as a fraction, so add the fractional part
-        # to the whole coil count
-        if len(coil_measure) == 2 and coil_measure[1] < 1.0:
-            coil_measure = np.array([coil_measure[0] + coil_measure[1]])
-
-        # a range of coils for polar tube should only be two numbers max
-        # i.e: 1 coil, 2 - 3 coils
-        # so if we get more than three numbers for a range, something weird
-        # was extracted, so don't add that to our coil measures
-        if len(coil_measure) <= 2:
-            coil_measures.append(coil_measure)
+        coil_measures.extend(
+            convert_coil_measure_to_numeric(sent[match[1] : match[2]])
+        )
 
     return sum(coil_measures)
 
 
-def convert_coil_measure_to_numeric(match: spacy.tokens.span.Span) -> np.ndarray:
-    numeric_coil_measures = []
+def convert_coil_measure_to_numeric(match: spacy.tokens.span.Span) -> List[np.ndarray]:    
+    numeric_toks = [tok for tok in match if tok.pos_ == 'NUM']
 
-    for measure in [tok for tok in match if tok.pos_ == 'NUM']:
-        try:
-            numeric_coil_measure = np.array([float(measure._.numerized)])
+    try:
+        if len(numeric_toks) == 2:
+            if '/' in numeric_toks[1].text:
+                # improperly numerized fraction
+                # ex: 7 1/2 coils -> 1/2 can't be converted to float after numerization without ValueError
+                fraction = float(numeric_toks[1].text.split("/")[0]) / float(numeric_toks[1].text.split("/")[1])
+                return [np.array([float(numeric_toks[0]._.numerized) + fraction])]
 
-        except ValueError:
-            
-            if '/' in measure.text:
-                 # fraction was not properly numerized
-                numeric_coil_measure = \
-                    np.array([float(measure.text.split("/")[0]) / float(measure.text.split("/")[1])])
-
-            elif re.search('\\d+.\\d+', measure.text):
-                # some kind of weirdly delimited coil range
-                split_ = re.split('[^0-9\\.]', measure.text)
-                numeric_coil_measure = \
-                    np.sort(np.array([float(numerizer.numerize(split_[0])), float(numerizer.numerize(split_[1]))]))
-            
-            else:
-                numeric_coil_measure = None
+            return [np.sort(np.array([float(tok._.numerized) for tok in numeric_toks]))]
         
-        if numeric_coil_measure is not None:
-            numeric_coil_measures.append(numeric_coil_measure)
-    
-    return sum(numeric_coil_measures)
-    # return np.sort(np.array(numeric_coil_measures).flatten())
+        elif len(numeric_toks) == 1:
+            if re.search('\\d+.\\d+', numeric_toks[0].text):
+                # some kind of weirdly delimited coil range detected as a single numeric token
+                split_ = re.split('[^0-9\\.]', numeric_toks[0].text)
+
+                if len(split_) == 2:
+                    return [
+                        np.sort(np.array([float(numerizer.numerize(split_[0])), float(numerizer.numerize(split_[1]))]))
+                        ]
+                
+                return []
+            
+            return [np.array(float(numeric_toks[0]._.numerized))]
+
+        return []
+
+    except (ValueError, TypeError) as e:
+        return []
 
 ###############################################################################
 
@@ -167,23 +160,21 @@ if __name__ == '__main__':
 
 # TODO - troubleshoot funny outputs
 
-# pt_df = pd.read_csv('../../../data/polar_coil_data/polar_coils.csv')
+pt_df = pd.read_csv('../../../data/polar_coil_data/polar_coils.csv')
 
-# preds = []
-# errors = []
+preds = []
+errors = []
 
-# for text in pt_df['abstract']:
-#     try:
-#         preds.append((text, predict_polar_tube_measures(text)))
+for text in pt_df['abstract']:
+    try:
+        preds.append((text, predict_polar_tube_measures(text)))
 
-#     except ValueError:
-#         errors.append(text)
+    except ValueError:
+        errors.append(text)
 
-triple_array = 'Collections of the dicyemid mesozoan Kantharella antarctica were made in the Weddell Sea during the Antarctic Expedition of the research vessel B.V Polarstern in 1990 and 1991. A diplokaryotic microsporidian was found infecting all nematogens from all the samples taken in both years. The infected cells contained all developmental stages. Merogony initially was monokaryotic and sporogony of diplokaryotic sporonts was by multiple fission. The stained ovoidal spores measured between 4.3-6 μm x 1.7-2.3 μm. The ultrastructural findings come from 11 specimens of Kantharella antarctica that were cut in serial sections. All developmental stages were noteworthy because of the myelinosomes situated adjacent to each diplokaryon. Similarly conspicuous were some organelles in the spore: a prominent, extraordinarily electron dense anterior portion of the polaroplast and the posterior vacuole. The isofilar polar filament with a diameter of about i 15 nm showed 9-11 coils. The great number of empty spore cases together with an extruded polar filament are indicative of an autoinfection. Though these characteristics resemble in part those of the genus Nosema from the family Nosematidae, the species in Kantharella antarctica differs from the former by its unusual development, life cycle and unusual host. Thus, this new species has been placed in a new genus and the name Wittmannia antarctica proposed.'
-weird_zero = 'A microsporidium was found infecting the fat body of larvae and adults of both sexes of Culex pipiens in Egypt. Developmental stages were found in larvae but only masses of spores were present in adults. The infection was easily visible in live mosquito larvae, as one or two blocks of opaque whitish fat body visible through the cuticle in each segment. Meronts were rounded cells, which were bounded by an unthickened unit membrane and divided by binary fission (rarely into four). At the onset of sporogony the surface membrane was thickened by electron dense deposits. This coat was sloughed off to form the sporophorous vesicle, the separation from the sporont surface being effected by the secretion of metabolic products into the sporophorous vesicle cavity. Division within the vesicle gave rise to eight uninucleate sporoblasts, then uninucleate spores. Spores exhibited an exospore of two membrane-like layers and a subtending layer of moderate electron density, appearing as eight to ten strata separated by fine lines and permeated by amorphous material, and an electron lucent endospore. The polar tube was anisofilar with 3–4 broad coils and 4–3 narrow coils. The development and spore structure were in accord with the genus Amblyospora Hazard and Oldacre, 1975 and, on the basis of spore size and number of coils of the polar tube, it is considered to be a new species, Amblyospora egypti n.sp.'
+triple_array = "The isofilar polar filament with a diameter of about i 15 nm showed 9-11 coils."
+weird_zero = "The polar tube was anisofilar with 3–4 broad coils and 4–3 narrow coils."
 multiple_error_1 = 'Polar filaments, arranged in two rows, were anisofilar with two wider anterior coils, and five narrower posterior coils'
 multiple_error_2 = 'The polar filament is lightly anisofilar with 2-3 wide anterior coils, and 2-3 more narrow posterior coils, in a single layer of coils in the posterior half of the spore.'
 
 error_1 = "The polar tube was arranged in one row of 13–18 coils including 0–3 distal coils of lesser diameter."
-
-predict_polar_tube_measures(error_1)

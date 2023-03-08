@@ -42,6 +42,17 @@ matcher.add('polar_coil', [coil_pattern])
 def main():
     pt_df = pd.read_csv('../../../data/polar_coil_data/polar_coils.csv')
 
+    pt_df['pred_pt_coils'] = [predict_polar_tube_measures(txt) for txt in pt_df.abstract]
+    pt_df['pt_coils_formatted'] = [convert_recorded_pt_to_arrays(pt) for pt in pt_df.pt_coils]
+
+    pt_df[['tp', 'fp', 'fn']] = \
+        pt_df.apply(lambda row: get_tp_fp_fn(row['pt_coils_formatted'], row['pred_pt_coils']),
+                    axis=1,
+                    result_type='expand')
+    
+    # serialize the resulting dataframe to a pickle file
+    pt_df.to_pickle('../../../results/pt_coil_rules/pt_coil_preds.pkl')
+
 ###############################################################################
 
 ## Helper functions
@@ -156,9 +167,8 @@ def convert_recorded_pt_to_arrays(pt_coils: str) -> str:
     return [np.array(re.split(' *[^\.\d] *', re.sub(' ?\(.+', '', pt))).astype('float') for \
         pt in pt_coils.split('; ')]
 
-def get_evaluation_metrics_for_pt_coil_prediction(pt_coils: List[np.ndarray],
-                                                  pt_coils_pred: List[np.ndarray]) \
-                                                    -> Dict[str, int]:
+def get_tp_fp_fn(pt_coils: List[np.ndarray], pt_coils_pred: List[np.ndarray]) \
+    -> Dict[str, int]:
     tp = 0
     for pred in pt_coils_pred:
         for recorded in pt_coils:
@@ -167,11 +177,9 @@ def get_evaluation_metrics_for_pt_coil_prediction(pt_coils: List[np.ndarray],
     fp = len(pt_coils_pred) - tp
     fn = len(pt_coils) - tp
 
-    return {'tp': tp, 'fp': fp, 'fn': fn}
+    return tp, fp, fn
 
 ###############################################################################
-
-# pt_df = pd.read_csv('../../../data/polar_coil_data/polar_coils.csv')
 
 if __name__ == '__main__':
     main()

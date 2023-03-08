@@ -4,7 +4,7 @@
 # Predict microsporidia polar tube coil measures from texts
 #
 # Jason Jiang - Created: Feb/07/2023
-#               Last edited: Mar/02/2023
+#               Last edited: Mar/08/2023
 #
 # Mideo Lab - Microsporidia text mining
 #
@@ -152,13 +152,26 @@ def convert_coil_measure_to_numeric(match: spacy.tokens.span.Span) -> List[np.nd
 # Functions for cleaning recorded coils data and evaluating predictions with
 # recorded coils data
 
-def clean_pt_coils_for_evaluation(pt_coils: str) -> str:
-    pass
+def convert_recorded_pt_to_arrays(pt_coils: str) -> str:
+    return [np.array(re.split(' *[^\.\d] *', re.sub(' ?\(.+', '', pt))).astype('float') for \
+        pt in pt_coils.split('; ')]
 
-def get_evaluation_metrics_for_pt_coil_prediction(pt_coils, pt_coils_pred) -> Dict[str, int]:
-    return {'tp': 0, 'fp': 0, 'fn': 0}
+def get_evaluation_metrics_for_pt_coil_prediction(pt_coils: List[np.ndarray],
+                                                  pt_coils_pred: List[np.ndarray]) \
+                                                    -> Dict[str, int]:
+    tp = 0
+    for pred in pt_coils_pred:
+        for recorded in pt_coils:
+            tp += np.array_equal(pred, recorded)
+
+    fp = len(pt_coils_pred) - tp
+    fn = len(pt_coils) - tp
+
+    return {'tp': tp, 'fp': fp, 'fn': fn}
 
 ###############################################################################
+
+# pt_df = pd.read_csv('../../../data/polar_coil_data/polar_coils.csv')
 
 if __name__ == '__main__':
     main()

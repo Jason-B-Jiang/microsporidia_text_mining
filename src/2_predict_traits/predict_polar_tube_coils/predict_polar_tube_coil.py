@@ -4,7 +4,7 @@
 # Predict microsporidia polar tube coil measures from texts
 #
 # Jason Jiang - Created: Feb/07/2023
-#               Last edited: Mar/08/2023
+#               Last edited: Mar/09/2023
 #
 # Mideo Lab - Microsporidia text mining
 #
@@ -19,7 +19,7 @@ import re
 import pandas as pd
 import numpy as np
 
-from typing import List, Tuple, Dict
+from typing import List, Tuple
 
 ###############################################################################
 
@@ -45,13 +45,37 @@ def main():
     pt_df['pred_pt_coils'] = [predict_polar_tube_measures(txt) for txt in pt_df.abstract]
     pt_df['pt_coils_formatted'] = [convert_recorded_pt_to_arrays(pt) for pt in pt_df.pt_coils]
 
-    pt_df[['tp', 'fp', 'fn']] = \
-        pt_df.apply(lambda row: get_tp_fp_fn(row['pt_coils_formatted'], row['pred_pt_coils']),
+    # combine rows with information from the same papers, so each row has polar
+    # tube coil information for species coming from the same paper
+    agg_dict = {
+    'species': lambda x: '; '.join(x),
+    'pt_coils': lambda x: '; '.join(x),
+    'pred_pt_coils': lambda x: [row for row in x],
+    'pt_coils_formatted': lambda x: [row for row in x]
+    }
+
+    pt_df_grouped = \
+        pt_df.groupby(['first_paper_title', 'abstract']).agg(agg_dict).reset_index()
+
+    # calculate true positives, false positives and false negatives for rule-based
+    # polar tube coil predictions for each paper
+    pt_df_grouped[['tp', 'fp', 'fn']] = \
+        pt_df_grouped.apply(lambda row: get_tp_fp_fn(row['pt_coils_formatted'],
+                                   row['pred_pt_coils']),
                     axis=1,
                     result_type='expand')
+
+    precision = sum(pt_df_grouped.tp) / (sum(pt_df_grouped.tp) + sum(pt_df_grouped.fp)) 
+    recall = sum(pt_df_grouped.tp) / (sum(pt_df_grouped.tp) + sum(pt_df_grouped.fn))
+    f1 = (2 * precision * recall) / (precision + recall)
+
+    # 83.7% precision, 83.3% recall, 83.5% F1
+    print(f"Precision: {round(precision * 100, 1)}%")
+    print(f"Recall: {round(recall * 100, 1)}%")
+    print(f"F1-score: {round(f1 * 100, 1)}%")
     
     # serialize the resulting dataframe to a pickle file
-    pt_df.to_pickle('../../../results/pt_coil_rules/pt_coil_preds.pkl')
+    pt_df_grouped.to_pickle('../../../results/pt_coil_rules/pt_coil_preds.pkl')
 
 ###############################################################################
 
@@ -167,8 +191,12 @@ def convert_recorded_pt_to_arrays(pt_coils: str) -> str:
     return [np.array(re.split(' *[^\.\d] *', re.sub(' ?\(.+', '', pt))).astype('float') for \
         pt in pt_coils.split('; ')]
 
-def get_tp_fp_fn(pt_coils: List[np.ndarray], pt_coils_pred: List[np.ndarray]) \
-    -> Dict[str, int]:
+def get_tp_fp_fn(pt_coils: List[List[np.ndarray]],
+                 pt_coils_pred: List[List[np.ndarray]]) -> Tuple[int]:
+    # first, unnest all the lists
+    pt_coils = [arr for lst in pt_coils for arr in lst]
+    pt_coils_pred = [arr for lst in pt_coils_pred for arr in lst]
+
     tp = 0
     for pred in pt_coils_pred:
         for recorded in pt_coils:

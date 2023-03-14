@@ -25,6 +25,12 @@ from typing import List, Tuple
 
 nlp = spacy.load('en_core_web_sm')  # initialize spacy's small language model
 
+# regex patterns for pure rule-based extraction of polar tube coils
+PT_REGEX = 'polar +(tube|tubule|filament)'
+COIL_REGEX = \
+    "([0-9]+( *- *| *to *)[0-9]+ +(coil|twist|spire|turn)s?|[0-9]+ +(coil|spire|twist|turn)s?)"
+
+# spaCy matcher for hybrid rule + ML based extraction of polar tube coils
 matcher = Matcher(nlp.vocab)
 
 coil_pattern = [
@@ -43,6 +49,7 @@ def main():
     pt_df = pd.read_csv('../../../data/polar_coil_data/polar_coils.csv')
 
     pt_df['pred_pt_coils'] = [predict_polar_tube_measures(txt) for txt in pt_df.abstract]
+    pt_df['pred_pt_coils_rules'] = [predict_polar_tube_measures_rules(txt) for txt in pt_df.abstract]
     pt_df['pt_coils_formatted'] = [convert_recorded_pt_to_arrays(pt) for pt in pt_df.pt_coils]
 
     # combine rows with information from the same papers, so each row has polar
@@ -51,13 +58,22 @@ def main():
     'species': lambda x: '; '.join(x),
     'pt_coils': lambda x: '; '.join(x),
     'pred_pt_coils': lambda x: [row for row in x],
+    'pred_pt_coils_rules': lambda x: [row for row in x],
     'pt_coils_formatted': lambda x: [row for row in x]
     }
 
     pt_df_grouped = \
         pt_df.groupby(['first_paper_title', 'abstract']).agg(agg_dict).reset_index()
 
-    # calculate true positives, false positives and false negatives for rule-based
+    # calculate true positives, false positives and flase negatives for pure
+    # rule-based polar tube coil predictions for each paper
+    pt_df_grouped[['tp_rules', 'fp_rules', 'fn_rules']] = \
+        pt_df_grouped.apply(lambda row: get_tp_fp_fn(row['pt_coils_formatted'],
+                                   row['pred_pt_coils_rules']),
+                    axis=1,
+                    result_type='expand')
+
+    # calculate true positives, false positives and false negatives for hybrid
     # polar tube coil predictions for each paper
     pt_df_grouped[['tp', 'fp', 'fn']] = \
         pt_df_grouped.apply(lambda row: get_tp_fp_fn(row['pt_coils_formatted'],
@@ -65,14 +81,25 @@ def main():
                     axis=1,
                     result_type='expand')
 
+    # Calculate performance metrics for rule-based approach
+    precision_ = sum(pt_df_grouped.tp_rules) / (sum(pt_df_grouped.tp_rules) + sum(pt_df_grouped.fp_rules)) 
+    recall_ = sum(pt_df_grouped.tp_rules) / (sum(pt_df_grouped.tp_rules) + sum(pt_df_grouped.fn_rules))
+    f1_ = (2 * precision_ * recall_) / (precision_ + recall_)
+
+    # 83.7% precision, 83.3% recall, 83.5% F1
+    print(f"Precision for rules: {round(precision_ * 100, 1)}%")
+    print(f"Recall for rules: {round(recall_ * 100, 1)}%")
+    print(f"F1-score for rules: {round(f1_ * 100, 1)}%")
+
+    # Calculate performance metrics for hybrid approach
     precision = sum(pt_df_grouped.tp) / (sum(pt_df_grouped.tp) + sum(pt_df_grouped.fp)) 
     recall = sum(pt_df_grouped.tp) / (sum(pt_df_grouped.tp) + sum(pt_df_grouped.fn))
     f1 = (2 * precision * recall) / (precision + recall)
 
     # 83.7% precision, 83.3% recall, 83.5% F1
-    print(f"Precision: {round(precision * 100, 1)}%")
-    print(f"Recall: {round(recall * 100, 1)}%")
-    print(f"F1-score: {round(f1 * 100, 1)}%")
+    print(f"Precision for hybrid: {round(precision * 100, 1)}%")
+    print(f"Recall for hybrid: {round(recall * 100, 1)}%")
+    print(f"F1-score for hybrid: {round(f1 * 100, 1)}%")
     
     # serialize the resulting dataframe to a pickle file
     pt_df_grouped.to_pickle('../../../results/pt_coil_rules/pt_coil_preds.pkl')
@@ -82,8 +109,38 @@ def main():
 ## Helper functions
 
 # Functions for predicting polar tube coil measures with rules
+def predict_polar_tube_measures_rules(text: str) -> List[np.ndarray]:
+    """
+    Pure rule-based approach for predicting polar tube coils from texts
+    """
+    sents = text.lower().split(". ")  # rule-based sentencization
+    pt_preds = []
+
+    for sent in sents:
+        if re.search(PT_REGEX, sent) and re.search(COIL_REGEX, sent):
+            pt_preds.append(
+                sum(
+                    [turn_coil_text_to_array(m[0]) for m in \
+                        re.findall(COIL_REGEX, sent)]
+                        )
+                    )
+
+    return pt_preds
+
+def turn_coil_text_to_array(coil_match: str) -> np.ndarray:
+    nums = []
+    for tok in re.split('-| +', coil_match):
+        try:
+            nums.append(float(tok))
+        except ValueError:
+            pass
+
+    return np.array(nums)
 
 def predict_polar_tube_measures(text: str) -> List[np.ndarray]:
+    """
+    Hybrid (rules + ML) approach for predicting polar tube coils from texts
+    """
     doc = nlp(text)
 
     # extract coil measures from polar tube sentences, treating the sum of
@@ -92,7 +149,7 @@ def predict_polar_tube_measures(text: str) -> List[np.ndarray]:
     polar_coils = []
 
     for sent in doc.sents:
-        if re.search('polar +(tube|tubule|filament)', sent.text.lower()) and \
+        if re.search(PT_REGEX, sent.text.lower()) and \
             matcher(sent):
             
             coil = get_sentence_coil_measure(sent)
@@ -209,5 +266,5 @@ def get_tp_fp_fn(pt_coils: List[List[np.ndarray]],
 
 ###############################################################################
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

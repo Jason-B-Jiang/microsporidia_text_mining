@@ -2,8 +2,8 @@
 #
 # Predict microsporidia species names + hosts from paper titles + abstracts
 #
-# Jason Jiang - Created: 2022/05/19
-#               Last edited: 2022/10/12
+# Jason Jiang - Created: May/19/2022
+#               Last edited: March/17/2023
 #
 # Mideo Lab - Microsporidia text mining
 #
@@ -14,13 +14,13 @@
 
 import re
 import pandas as pd
-from taxonerd import TaxoNERD
+# from taxonerd import TaxoNERD
 import spacy
 from spacy.matcher import Matcher
 from typing import Tuple, Union, List, Dict, Set
 import numpy as np
-from wordcloud import WordCloud, STOPWORDS
-import matplotlib.pyplot as plt
+# from wordcloud import WordCloud, STOPWORDS
+# import matplotlib.pyplot as plt
 from collections import Counter
 import pickle
 import copy
@@ -29,11 +29,11 @@ import copy
 
 ## Initialize language models + other global variables
 
-taxonerd = TaxoNERD(model="en_ner_eco_biobert",  # use more accurate model
-                    prefer_gpu=False,
-                    with_abbrev=True)
+# taxonerd = TaxoNERD(model="en_ner_eco_biobert",  # use more accurate model
+#                     prefer_gpu=False,
+#                     with_abbrev=True)
 
-nlp = spacy.load('en_core_web_md')
+nlp = spacy.load('en_core_web_sm')
 
 try:  # get cached microsporidia/host predictions for texts, if exists
     with open('./cached_microsp_host_preds.pickle', 'rb') as p:
@@ -50,8 +50,9 @@ DOC_CACHE = {}
 # all microsporidia genus names from NCBI
 MICROSP_GENUSES = \
     pd.read_csv('../../../data/microsp_genuses/microsporidia_genuses.tsv',
-        sep='\t')['name'].tolist()
+        sep='\t')['name'].str.lower().tolist()
 
+MICROSP_REGEX = f"(?:{'|'.join(MICROSP_GENUSES)}) [a-z]+"
 MICROSP_GENUSES = f"({'|'.join(MICROSP_GENUSES)})"
 
 # conventional ways of indicating new species/genuses
@@ -62,13 +63,57 @@ NEW_SPECIES_INDICATORS = \
 NEW_GENUS_INDICATORS = \
     r' ([Nn](ov|OV)?(\.|,) ?[Gg](en|EN)?(\.|,)|[Gg](en|EN)?(\.|,) ?[Nn](ov|OV)?(\.|,))'
 
-# verbs in microsporidia/host sentences to exclude (not informative)
-EXCLUDED_VERBS = {'ribosomal', 'fly'}
-
 ################################################################################
 
 def main() -> None:
-    microsp_and_host_names = pd.read_csv('../../../data/formatted_host_microsp_names.csv')
+    microsp_and_host_names = \
+        pd.read_csv('../../../data/formatted_host_microsp_names.csv').drop(
+        ['microsp_in_text_matches', 'hosts_in_text_matches'], axis=1
+        )
+    
+    # make title_abstract column all lowercase + strip away excess spaces
+    microsp_and_host_names['title_abstract_cleaned'] = \
+        microsp_and_host_names.title_abstract.str.lower().replace(
+            ' {2,}', ' ', regex=True
+        )
+    
+    # convert microsp_in_text to numpy arrays
+    microsp_and_host_names['microsp_in_text_arr'] = \
+        microsp_and_host_names['microsp_in_text'].str.lower().str.split(
+            ' \|\| |; ', regex=True
+        )
+    
+    # assign column for naive rule-based prediction of microsporidia host
+    # entities
+    microsp_and_host_names['pred_microsp_rules'] = \
+        microsp_and_host_names.apply(lambda x: predict_microsp_rules(x.title_abstract),
+                                     axis=1)
+
+    # add start and stop bounds for predicted and recorded microsporidia entities
+    microsp_and_host_names[['pred_microsp_rules_bounds', 'microsp_in_text_bounds']] = \
+        microsp_and_host_names[['title_abstract_cleaned', 'pred_microsp_rules', 'microsp_in_text_arr']].apply(
+            lambda x: [get_match_bounds_in_text(x['title_abstract_cleaned'], x['pred_microsp_rules']),
+                       get_match_bounds_in_text(x['title_abstract_cleaned'], x['microsp_in_text_arr'])],
+                       axis=1, result_type='expand'
+        )
+    
+    # calculate tp, fp and fn for rule-based microsporidia entity prediction
+    microsp_and_host_names[['tp_rules', 'fp_rules', 'fn_rules']] = \
+        microsp_and_host_names.apply(
+            lambda row: get_rules_tp_fp_fn(row['pred_microsp_rules_bounds'],
+                                           row['microsp_in_text_bounds']),
+            axis=1,
+            result_type='expand')
+    
+    # Calculate performance metrics for rule-based microsporidia NER
+    precision_ = sum(microsp_and_host_names.tp_rules) / (sum(microsp_and_host_names.tp_rules) + sum(microsp_and_host_names.fp_rules)) 
+    recall_ = sum(microsp_and_host_names.tp_rules) / (sum(microsp_and_host_names.tp_rules) + sum(microsp_and_host_names.fn_rules))
+    f1_ = (2 * precision_ * recall_) / (precision_ + recall_)
+
+    # 45.7% precision, 73.4% recall, 56.4% F1
+    print(f"Precision for rules: {round(precision_ * 100, 1)}%")
+    print(f"Recall for rules: {round(recall_ * 100, 1)}%")
+    print(f"F1-score for rules: {round(f1_ * 100, 1)}%")
 
     # assign new columns for predicted microsporidia + host species names from
     # texts
@@ -131,6 +176,34 @@ def get_cached_document(txt: str) -> spacy.tokens.doc.Doc:
         DOC_CACHE[txt] = nlp(txt)
     
     return DOC_CACHE[txt]
+
+
+def predict_microsp_rules(txt: str) -> str:
+    """Rule-based prediction for microsporidia species entities in texts.
+    """
+    txt = re.sub(' {2,}', ' ', txt.lower())
+    return list(set(re.findall(MICROSP_REGEX, txt)))
+
+
+def get_match_bounds_in_text(txt: str, matches: Union[np.ndarray, List[str]]) -> np.ndarray:
+    try:
+        bounds = []
+        for match in matches:
+            bounds.extend([[m.start(), m.end()] for m in re.finditer(match, txt)])
+
+        return np.array(bounds)
+    
+    except TypeError:
+        return np.array([])
+    
+
+def get_rules_tp_fp_fn(pred: List[List[np.ndarray]],
+                       recorded: List[List[np.ndarray]]) -> Tuple[int]:
+    tp = np.sum([p in recorded for p in pred])
+    fp = len(pred) - tp
+    fn = len(recorded) - tp
+
+    return int(tp), int(fp), int(fn)
 
 
 def predict_microsp_and_hosts(txt: str) -> Tuple[str, str]:
@@ -320,7 +393,7 @@ def make_trigger_words_matcher(verb_freqs: pd.core.frame.DataFrame, n: int = 20)
     spacy.matcher.matcher.Matcher:
     """Return a spaCy matcher 
     """
-    trigger_words = list(filter(lambda v: v not in EXCLUDED_VERBS,
+    trigger_words = list(filter(lambda v: v not in EXCLUDED_VERBS and v not in STOPWORDS,
                                 set(verb_freqs.verb[:n])))
     trigger_words_matcher = Matcher(nlp.vocab)
     trigger_words_matcher.add('trigger', [

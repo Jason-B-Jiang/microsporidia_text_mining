@@ -15,12 +15,15 @@ import spacy
 from flashgeotext.geotext import GeoText
 import pandas as pd
 import re
+from taxonerd import TaxoNERD
 from typing import List, Set, Tuple
 
 ###############################################################################
 
 ## Global variables
 nlp = spacy.load('en_core_web_sm')
+taxonerd = TaxoNERD(prefer_gpu=False)
+nlp_taxonerd = taxonerd.load(model='en_core_eco_md')
 geotext = GeoText()
 
 ###############################################################################
@@ -42,6 +45,12 @@ def main():
 
     locality_df['pred_locality_ml'] = locality_df.apply(
         lambda row: predict_localities_with_spacy(row['title_abstract']),
+        axis=1
+    )
+
+    locality_df['pred_locality_ml_no_taxons'] = locality_df.apply(
+        lambda row: filter_out_taxonomic_localities(row['pred_locality_ml'],
+                                                    row['title_abstract']),
         axis=1
     )
 
@@ -103,8 +112,8 @@ def unnest_subregions_from_regions(locs: str) -> List[str]:
 
 
 def extract_locs_from_geotext_match(geo_match: dict) -> List[str]:
-    cities = [city for city in geo_match['cities']]
-    countries = [country for country in geo_match['countries']]
+    cities = [city.lower() for city in geo_match['cities']]
+    countries = [country.lower() for country in geo_match['countries']]
 
     return cities + countries
 
@@ -118,7 +127,7 @@ def normalize_localities_with_geotext(locs: List[str]) -> Set[str]:
             normalized_locs.extend(geo_match)
         else:
             if loc != '?':  # sometimes ? was recorded to indicate uncertainty, not subregion
-                normalized_locs.append(loc)
+                normalized_locs.append(loc.lower())
 
     return set(normalized_locs)
 
@@ -130,9 +139,18 @@ def predict_localities_with_geotext(txt: str) -> List[str]:
 
 def predict_localities_with_spacy(txt: str) -> Set[str]:
     doc = nlp(txt)
-    loc_ents = [ent.text for ent in doc.ents if ent.label_ in ['LOC', 'GPE']]
+    loc_ents = [re.sub('[Tt]he ', '', ent.text) for ent in doc.ents if ent.label_ in ['LOC', 'GPE']]
 
     return normalize_localities_with_geotext(loc_ents)
+
+
+def get_taxonerd_entities(txt: str) -> Set[str]:
+    return [ent.text.lower() for ent in nlp_taxonerd(txt).ents]
+
+
+def filter_out_taxonomic_localities(locs: Set[str], txt: str) -> Set[str]:
+    taxonerd_ents = get_taxonerd_entities(txt)
+    return set([loc for loc in locs if sum([loc in taxon for taxon in taxonerd_ents]) < 1])
 
 
 def get_predicted_locality_tp_fp_fn(recorded_locs: Set[str],

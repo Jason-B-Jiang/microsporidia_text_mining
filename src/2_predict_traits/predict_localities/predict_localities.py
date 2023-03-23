@@ -4,7 +4,7 @@
 # Predict localities from microsporidia texts
 #
 # Jason Jiang - Created: Mar/20/2023
-#               Last edited: Mar/22/2023
+#               Last edited: Mar/23/2023
 #
 # Mideo Lab - Microsporidia text mining
 #
@@ -15,7 +15,7 @@ import spacy
 from flashgeotext.geotext import GeoText
 import pandas as pd
 import re
-from typing import List
+from typing import List, Set, Tuple
 
 ###############################################################################
 
@@ -26,14 +26,70 @@ geotext = GeoText()
 ###############################################################################
 
 def main():
-    pass
+    locality_df = pd.read_csv('../../../data/microsporidia_species_and_abstracts.csv')
+    locality_df = \
+        locality_df[['species', 'title_abstract', 'locality']].dropna(subset=['title_abstract'])
+
+    locality_df['normalized_locality'] = locality_df.apply(
+        lambda row: normalize_localities_with_geotext(unnest_subregions_from_regions(row['locality'])),
+        axis=1
+    )
+
+    locality_df['pred_locality_rules'] = locality_df.apply(
+        lambda row: predict_localities_with_geotext(row['title_abstract']),
+        axis=1
+    )
+
+    locality_df['pred_locality_ml'] = locality_df.apply(
+        lambda row: predict_localities_with_spacy(row['title_abstract']),
+        axis=1
+    )
+
+    locality_df[['tp_rules', 'fp_rules', 'fn_rules']] = locality_df.apply(
+        lambda row: get_predicted_locality_tp_fp_fn(row['normalized_locality'],
+                                                    row['pred_locality_rules']),
+        axis=1,
+        result_type='expand'
+    )
+
+    locality_df[['tp_ml', 'fp_ml', 'fn_ml']] = locality_df.apply(
+        lambda row: get_predicted_locality_tp_fp_fn(row['normalized_locality'],
+                                                    row['pred_locality_ml']),
+        axis=1,
+        result_type='expand'
+    )
+
+    # calculate precision, recall and f1 for rules and hybrid approach
+    precision_rules = sum(locality_df.tp_rules) / (sum(locality_df.tp_rules) + sum(locality_df.fp_rules))
+    recall_rules = sum(locality_df.tp_rules) / (sum(locality_df.tp_rules) + sum(locality_df.fn_rules))
+    f1_rules = (2 * precision_rules * recall_rules) / (precision_rules + recall_rules)
+
+    # 46.4% precision, 28.2% recall, 35.1% F1
+    print('\n#------------------------------------------------------------#\n')
+    print(f"Precision for rules: {round(precision_rules * 100, 1)}%")
+    print(f"Recall for rules: {round(recall_rules * 100, 1)}%")
+    print(f"F1-score for rules: {round(f1_rules * 100, 1)}%")
+    print('\n#------------------------------------------------------------#\n')
+
+    precision_hybrid = sum(locality_df.tp_ml) / (sum(locality_df.tp_ml) + sum(locality_df.fp_ml))
+    recall_hybrid = sum(locality_df.tp_ml) / (sum(locality_df.tp_ml) + sum(locality_df.fn_ml))
+    f1_hybrid = (2 * precision_hybrid * recall_hybrid) / (precision_hybrid + recall_hybrid)
+
+    # 16.0% precision, 31.5% recall, 21.2% F1
+    print(f"Precision for hybrid: {round(precision_hybrid * 100, 1)}%")
+    print(f"Recall for hybrid: {round(recall_hybrid * 100, 1)}%")
+    print(f"F1-score for hybrid: {round(f1_hybrid * 100, 1)}%")
+    print('\n#------------------------------------------------------------#\n')
 
 ###############################################################################
 
 ## Helper functions
 
 def unnest_subregions_from_regions(locs: str) -> List[str]:
-    locs = [loc.strip() for loc in locs.split('; ')]
+    if type(locs) == float:  # NaN for recorded localities
+        return []
+    
+    locs = [loc.strip() for loc in re.split(' *; *|, *', locs)]
     unnested_locs = []
 
     for loc in locs:
@@ -41,7 +97,7 @@ def unnest_subregions_from_regions(locs: str) -> List[str]:
         if len(subregions) > 0:
             unnested_locs.extend(subregions[0].split(' | '))
 
-        unnested_locs.append(re.sub(' *\(.+', '', loc))
+        unnested_locs.append(re.sub(' *\(.+\) *', '', loc))
 
     return unnested_locs
 
@@ -53,7 +109,7 @@ def extract_locs_from_geotext_match(geo_match: dict) -> List[str]:
     return cities + countries
 
 
-def normalize_localities_with_geotext(locs: List[str]) -> List[str]:
+def normalize_localities_with_geotext(locs: List[str]) -> Set[str]:
     normalized_locs = []
     for loc in locs:
         geo_match = extract_locs_from_geotext_match(geotext.extract(input_text=loc))
@@ -61,9 +117,10 @@ def normalize_localities_with_geotext(locs: List[str]) -> List[str]:
         if geo_match:
             normalized_locs.extend(geo_match)
         else:
-            normalized_locs.append(loc)
+            if loc != '?':  # sometimes ? was recorded to indicate uncertainty, not subregion
+                normalized_locs.append(loc)
 
-    return normalized_locs
+    return set(normalized_locs)
 
 
 def predict_localities_with_geotext(txt: str) -> List[str]:
@@ -71,11 +128,20 @@ def predict_localities_with_geotext(txt: str) -> List[str]:
     return set(extract_locs_from_geotext_match(geo_matches))
 
 
-def predict_localities_with_spacy(txt: str) -> List[str]:
+def predict_localities_with_spacy(txt: str) -> Set[str]:
     doc = nlp(txt)
     loc_ents = [ent.text for ent in doc.ents if ent.label_ in ['LOC', 'GPE']]
 
-    return set(normalize_localities_with_geotext(loc_ents))
+    return normalize_localities_with_geotext(loc_ents)
+
+
+def get_predicted_locality_tp_fp_fn(recorded_locs: Set[str],
+                                    pred_locs: Set[str]) -> Tuple[int]:
+    tp = len(recorded_locs.intersection(pred_locs))
+    fp = len(pred_locs) - tp
+    fn = len(recorded_locs) - tp
+
+    return tp, fp, fn
 
 ###############################################################################
 

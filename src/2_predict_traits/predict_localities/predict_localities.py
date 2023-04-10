@@ -33,7 +33,7 @@ geotext = GeoText()
 def main():
     locality_df = pd.read_csv('../../../data/microsporidia_species_and_abstracts.csv')
     locality_df = \
-        locality_df[['species', 'title_abstract', 'locality']].dropna(subset=['title_abstract'])
+        locality_df[['species', 'title_abstract', 'locality']].dropna(subset=['title_abstract']).reset_index(drop=True)
 
     locality_df['unnested_locality'] = locality_df.apply(
         lambda row: unnest_subregions_from_regions(row['locality']),
@@ -117,7 +117,10 @@ def main():
     recall_rules = sum(locality_df.tp_rules) / (sum(locality_df.tp_rules) + sum(locality_df.fn_rules))
     f1_rules = (2 * precision_rules * recall_rules) / (precision_rules + recall_rules)
 
-    # 46.4% precision, 28.2% recall, 35.1% F1
+    # 54.7% precision, 69.0% recall, 61.0% F1
+    # fp: irrelevant words picked up by geotext
+    #     ex: row 23, author names
+    # fn: non-country and non-city localities, like oceans
     print('\n#------------------------------------------------------------#\n')
     print(f"Precision for rules: {round(precision_rules * 100, 1)}%")
     print(f"Recall for rules: {round(recall_rules * 100, 1)}%")
@@ -128,7 +131,9 @@ def main():
     recall_hybrid = sum(locality_df.tp_ml) / (sum(locality_df.tp_ml) + sum(locality_df.fn_ml))
     f1_hybrid = (2 * precision_hybrid * recall_hybrid) / (precision_hybrid + recall_hybrid)
 
-    # 16.0% precision, 31.5% recall, 21.2% F1
+    # 21.8% precision, 86.3% recall, 34.8% F1
+    # fp: taxonomic names, incidental mentions
+    # fn: implicit, ex: row 147, Australian marine fish
     print(f"Precision for hybrid: {round(precision_hybrid * 100, 1)}%")
     print(f"Recall for hybrid: {round(recall_hybrid * 100, 1)}%")
     print(f"F1-score for hybrid: {round(f1_hybrid * 100, 1)}%")
